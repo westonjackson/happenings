@@ -1,10 +1,31 @@
 import React from 'react';
+import firebase from 'firebase';
 
 class Main extends React.Component {
+	state = {
+		people: []
+	}
+	componentWillMount = () => {
+	  //TODO get this going
+	  this.firebaseRef = firebase.database().ref('people');
+	  this.firebaseRef.limitToLast(100).on('value', function(dataSnapshot) {
+	    var items = [];
+	    dataSnapshot.forEach(function(childSnapshot) {
+	      var item = childSnapshot.val();
+	      item['.key'] = childSnapshot.key;
+	      items.push(item);
+	    });
+	    this.setState({
+	      people: items
+	    });
+	  }.bind(this));
+	}
 	render() {
+		debugger;
 		const text = 'whats happening';
+		var ref = firebase.database().ref("people")
 		return (
-			<div>{text}</div>
+			<div>{this.state.items}</div>
 		);
 	}
 }
