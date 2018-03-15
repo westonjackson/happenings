@@ -6,7 +6,6 @@ class Main extends React.Component {
 		people: []
 	}
 	componentWillMount = () => {
-	  //TODO get this going
 	  this.firebaseRef = firebase.database().ref('people');
 	  this.firebaseRef.limitToLast(100).on('value', function(dataSnapshot) {
 	    var items = [];
@@ -21,7 +20,6 @@ class Main extends React.Component {
 	  }.bind(this));
 	}
 	render() {
-		debugger;
 		const text = 'whats happening';
 		var ref = firebase.database().ref("people")
 		return (
