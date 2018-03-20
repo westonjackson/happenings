@@ -1,9 +1,7 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import firebase from 'firebase';
-import Main from './Main.jsx';
+import Rebase from 're-base';
+import firebase from 'firebase/app';
+import 'firebase/database';
 
-const title = 'WHATS HAPPENING';
 var config = {
   apiKey: "AIzaSyC1lA8fDONZuH00U8J_fUH8IRFJ8hs4fBY",
   authDomain: "happenings-1b935.firebaseapp.com",
@@ -12,10 +10,7 @@ var config = {
   storageBucket: "happenings-1b935.appspot.com",
   messagingSenderId: "1026371810811"
 };
-firebase.initializeApp(config);
-ReactDOM.render(
-  <div>
-  	<Main />
-  </div>,
-  document.getElementById('app')
-);
+
+var app = firebase.initializeApp(config);
+var base = Rebase.createClass(app.database());
+export default base;

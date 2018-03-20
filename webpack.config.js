@@ -7,7 +7,7 @@ var APP_DIR = path.resolve(__dirname + '/app')
 config = {
   entry: [
     'react-hot-loader/patch',
-    APP_DIR + '/index.js'
+    APP_DIR + '/App.jsx'
   ],
   module: {
     rules: [

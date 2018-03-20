@@ -24,8 +24,9 @@
   "dependencies": {
     "babel-preset-env": "^1.6.1",
     "firebase": "^4.11.0",
+    "prop-types": "^15.6.1",
+    "re-base": "^3.2.2",
     "react": "^16.2.0",
-    "react-dom": "^16.2.0",
-    "reactfire": "^1.0.0"
+    "react-dom": "^16.2.0"
   }
 }
