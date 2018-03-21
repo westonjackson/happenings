@@ -1,23 +1,5 @@
-// import firebase from 'firebase';
-// 	// Firebase SDK.
-// 	this.database = firebase.database();
-// 	this.storage = firebase.storage();
-// 	this.auth = firebase.auth();
 import firebase from 'firebase';
 import base from '../rebase';
-
-export function getPosts() {
-	base.fetch('posts', {
-		context: this,
-		asArray: true
-	}).then(data => {
-		console.log('got data');
-		console.log(data);
-		return data;
-	}).catch(error => {
-		console.log('getPosts() failed')
-	})
-};
 
 export function getPostData(postId) {
 	return postId;
@@ -48,7 +30,7 @@ export function getPaginatedFeed(uri, pageSize, earliestEntryId = null, fetchPos
 			);
 		}
 		if (fetchPostDetails) {
-			// fetch details of all posts.
+			// fetch details of all posts. TODO: maybe do away with this entirely??
 			const queries = entryIds.map(postId => getPostData(postId));
 			// since all the requests are being done on the same feed, its unlikely that a single
 			// one would fail and not the others so using Promise.all() is not so risky.
@@ -68,7 +50,7 @@ export function getPaginatedFeed(uri, pageSize, earliestEntryId = null, fetchPos
 					// lets run the query again to get the correct # of posts.
 					return getPaginatedFeed(uri, pageSize, earliestEntryId, fetchPostDetails);
 				}
-				return {entries: entries, nextPgae: nextPage}
+				return {entries: entries, nextPage: nextPage}
 			});
 		}
 		return {entries: entries, nextPage: nextPage}

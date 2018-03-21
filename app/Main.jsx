@@ -1,5 +1,4 @@
 import React from 'react';
-import firebase from 'firebase';
 import base from './rebase';
 import { getPaginatedFeed } from './utils/'
 // import { PAGE_SIZE } from './constants/'
@@ -39,6 +38,7 @@ class Main extends React.Component {
 	}
 	addPosts() {
 		const posts = this.state.posts;
+		console.log(posts);
 		return Object.keys(posts).map(postId => {
 			let postData = posts[postId];
 			return (
@@ -57,7 +57,7 @@ class Main extends React.Component {
 	}
 	render() {
 		return (
-			<div>{this.state.gotData && this.addPosts()}</div>
+			<div>{ this.state.gotData && this.addPosts() }</div>
 		);
 	}
 }
