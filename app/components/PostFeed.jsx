@@ -1,9 +1,13 @@
 import React from 'react';
-import base from './rebase';
-import { getPaginatedFeed } from './utils/'
+import base from '../rebase';
+import { getPaginatedFeed } from '../utils/'
 // import { PAGE_SIZE } from './constants/'
 
-import Post from './components/Post.jsx';
+import NavBar from './NavBar.jsx';
+import Post from './Post.jsx';
+
+// right now this is just loading an initial batch of posts for the DB
+// eventually this should be the feed where you see posts from people you follow.
 
 class Main extends React.Component {
 	PAGE_SIZE = 5;
@@ -57,7 +61,10 @@ class Main extends React.Component {
 	}
 	render() {
 		return (
-			<div>{ this.state.gotData && this.addPosts() }</div>
+			<div>
+				<NavBar />
+				<div>{ this.state.gotData && this.addPosts() }</div>
+			</div>
 		);
 	}
 }
