@@ -6,24 +6,44 @@ import Comment from './Comment.jsx';
 class Post extends React.Component {
 	COMMENTS_PAGE_SIZE = 3;
 	state = {
-		comments: {},
-		gotComments: false
+		comments: [],
+		gotComments: false,
+		nextPage: null,
 	};
-	componentWillMount() {
+	toArray(dict) {
+		return Object.keys(dict).map(key => {
+			return { ...dict[key], key: key }
+		});
+	}
+	componentWillMount = () => {
 		const postId = this.props.id;
 		this.fetchComments(postId).then(data => {
 			this.setState({
-				comments: data.entries,
-				gotComments: true
+				comments: this.toArray(data.entries),
+				gotComments: true,
+				nextPage: data.nextPage,
 			});
 		});
 	}
 	// TODO: Subscribe to new comments
-	fetchComments(postId) {
+	fetchComments = (postId) => {
 		return getPaginatedFeed(`/comments/${postId}`, this.COMMENTS_PAGE_SIZE, null, false);
 	}
-	addComments() {
-		const commentData = this.state.comments;
+	loadMoreComments = () => {
+		let currentComments = this.state.comments;
+		let callback = this.state.nextPage;
+		callback().then(data => {
+			this.setState({
+				comments: currentComments.concat(this.toArray(data.entries)),
+				gotComments: true,
+				nextPage: data.nextPage,
+			});
+		});
+	}
+	addCommentsToPost() {
+		const commentData = this.state.comments.sort((a, b) => {
+			return a.timestamp - b.timestamp
+		});
 		return Object.keys(commentData).map(key => {
 			const comment = commentData[key];
 			return (
@@ -36,20 +56,30 @@ class Post extends React.Component {
 		});
 	}
 	render() {
-		console.log(this.state.comments);
 		const caption = (
 			<Comment
 				author={this.props.author}
 				text={this.props.caption}
 			/>			
 		);
+
+		const nextPageBtn = this.state.nextPage ? (
+			<div className='more-comments-btn'>
+				<span
+					className='more-comments-btn text'
+					onClick={this.loadMoreComments}
+				>~ load more comments ~</span>
+			</div>
+		) : null;
+
 		return (
 			<div className='post-container'>
 				<div className='post-author'>{this.props.author.full_name}</div>
 				<img src={this.props.full_url} height="300" width="300"></img>
 				<div className='comments-container'>
 					{caption}
-					{this.state.gotComments && this.addComments()}
+					{nextPageBtn}
+					{this.addCommentsToPost()}
 				</div>
 			</div>
 		)

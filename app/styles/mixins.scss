@@ -1,0 +1,16 @@
+@mixin pad-vertical($px) {
+	padding-top: $px;
+	padding-bottom: $px;
+}
+@mixin pad-horizontal($px) {
+	padding-left: $px;
+	padding-right: $px;
+}
+@mixin margin-vertical($px) {
+	margin-top: $px;
+	margin-bottom: $px;
+}
+@mixin margin-horizontal($px) {
+	margin-left: $px;
+	margin-right: $px;
+}

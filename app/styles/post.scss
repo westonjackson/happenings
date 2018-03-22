@@ -1,17 +1,18 @@
+@import 'mixins';
+
 .post-container {
 	border: 1px solid black;
 	margin-top: 10px;
 	margin-bottom: 10px;
-	padding-left: 10px;
-	padding-right: 10px;
+	@include pad-horizontal(10px);
 	width: 300px;
 }
 
 .comments-container {
 	width: 100%;
-	border-top: 1px solid black;
-	padding-top: 10px;
-	padding-bottom: 10px;
+	border-top: 1px solid #aaa;
+	@include pad-vertical(10px);
+	margin-top: 10px;
 }
 
 .comment {
@@ -19,8 +20,19 @@
 	overflow-wrap: break-word;
 }
 
+.more-comments-btn {
+	font-family: courier;
+	text-align: center;
+	font-size: 10px;
+	color: #888;
+	@include pad-vertical(5px);
+	.text {
+		cursor: pointer;
+	}
+}
+
 .post-author {
 	font-family: courier;
-	padding-top: 10px;
-	padding-bottom: 10px;
+	font-weight: bold;
+	@include pad-vertical(10px);
 }

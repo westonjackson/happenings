@@ -33,7 +33,6 @@ class Main extends React.Component {
 	// }
 	getGeneralFeed = () => {
 		this.getPosts().then(data => {
-			// data = {entries: entries, nextPage: fn}
 			this.setState({posts: data.entries, gotData: true});
 		});
 	}
@@ -42,7 +41,6 @@ class Main extends React.Component {
 	}
 	addPosts() {
 		const posts = this.state.posts;
-		console.log(posts);
 		return Object.keys(posts).map(postId => {
 			let postData = posts[postId];
 			return (
