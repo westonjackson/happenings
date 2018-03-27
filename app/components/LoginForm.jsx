@@ -5,19 +5,21 @@ import { signInWithEmailAndPassword } from '../utils/auth';
 class LoginForm extends React.Component {
 	state = {
 		email: '',
-		password: ''
-	};
+		password: '',
+		loggingIn: false
+	}
 	handleChange = (event) => {
 		this.setState({
-			[event.target.id]: event.target.value
+			[event.target.name]: event.target.value
 		});
-	}
-	handleSubmit = (event) => {
-		event.preventDefault();
-		signInWithEmailAndPassword(this.state.email, this.state.password);
 	}
 	validateForm() {
 		return this.state.email.length > 0 && this.state.password.length > 0;
+	}
+	handleSubmit = (event) => {
+		event.preventDefault();
+		//TODO: make inputs disabled when login is being confirmed by Firebase.
+		signInWithEmailAndPassword(this.state.email, this.state.password);
 	}
 	render () {
 		return (
@@ -26,13 +28,13 @@ class LoginForm extends React.Component {
 				<form onSubmit={this.handleSubmit}>
 					<input
 						type="text"
-						id="email"
+						name="email"
 						value={this.state.email}
 						onChange={this.handleChange}
 					/>
 					<input
-						type="text"
-						id="password"
+						type="password"
+						name="password"
 						value={this.state.password}
 						onChange={this.handleChange}
 					/>
