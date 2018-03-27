@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom';
 import firebase from 'firebase';
 
 import PostFeed from './components/PostFeed.jsx';
+import LoginForm from './components/LoginForm';
 
 // import all css dependencies here to be bundled by webpack
 import './styles/App.scss';
@@ -14,6 +15,7 @@ import './styles/App.scss';
 
 ReactDOM.render(
   <div>
+	<LoginForm />
   	<PostFeed />
   </div>,
   document.getElementById('app')
