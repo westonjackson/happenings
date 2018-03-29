@@ -1,5 +1,6 @@
 import firebase from 'firebase';
 import base from '../rebase';
+import 'whatwg-fetch';
 
 // create a form that allows users to register with the app
 // using their email address and password.

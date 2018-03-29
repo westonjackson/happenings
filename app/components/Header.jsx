@@ -2,7 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 
 // put nav links here
-class NavBar extends React.Component {
+class Header extends React.Component {
 	render() {
 		return (
 			<div className='nav-bar-container'>
@@ -18,4 +18,4 @@ class NavBar extends React.Component {
 	}
 }
 
-export default NavBar;
+export default Header;
