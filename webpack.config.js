@@ -6,8 +6,9 @@ var APP_DIR = path.resolve(__dirname + '/app')
 
 config = {
   entry: [
+    'whatwg-fetch',
     'react-hot-loader/patch',
-    APP_DIR + '/App.jsx'
+    APP_DIR + '/index.js'
   ],
   module: {
     rules: [
@@ -35,7 +36,8 @@ config = {
   ],
   devServer: {
     contentBase: BUILD_DIR,
-    hot: true
+    hot: true,
+    historyApiFallback: true,
   }
 };
 

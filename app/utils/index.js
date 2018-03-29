@@ -1,5 +1,6 @@
 import firebase from 'firebase';
 import base from '../rebase';
+import 'whatwg-fetch';
 
 export function getPostData(postId) {
 	return postId;

@@ -3,7 +3,6 @@ import base from '../rebase';
 import { getPaginatedFeed } from '../utils/'
 // import { PAGE_SIZE } from './constants/'
 
-import NavBar from './NavBar.jsx';
 import Post from './Post.jsx';
 
 // right now this is just loading an initial batch of posts for the DB
@@ -60,7 +59,6 @@ class Main extends React.Component {
 	render() {
 		return (
 			<div>
-				<NavBar />
 				<div>{ this.state.gotData && this.addPosts() }</div>
 			</div>
 		);
