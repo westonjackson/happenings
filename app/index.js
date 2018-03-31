@@ -2,10 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { BrowserRouter } from 'react-router-dom';
 import App from './components/App.jsx';
-
-// import all css dependencies here to be bundled by webpack
 import './styles/index.scss';
-
 
 ReactDOM.render((
     <BrowserRouter>

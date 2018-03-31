@@ -1,5 +1,5 @@
 import React from 'react';
-import base from '../rebase';
+import base from '../utils/rebase';
 import { getPaginatedFeed } from '../utils/'
 // import { PAGE_SIZE } from './constants/'
 

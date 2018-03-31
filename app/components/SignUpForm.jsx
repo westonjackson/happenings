@@ -10,7 +10,7 @@ class SignUpForm extends React.Component {
 		passwordConfirm: ''
 	}
 
-	MIN_PASSWORD_LENGTH = 5;
+	MIN_PASSWORD_LENGTH = 6;
 
 	handleChange = (event) => {
 		this.setState({
@@ -18,13 +18,13 @@ class SignUpForm extends React.Component {
 		});
 	}
 	validateEmail = () => {
-		return this.state.email == this.state.emailConfirm
+		return (this.state.email == this.state.emailConfirm);
 	}
 	validatePassword = () => {
 		return (
-			(this.state.password == this.state.confirmPassword)
-			&& this.state.password.length > this.MIN_PASSWORD_LENGTH
-		);
+			(this.state.password == this.state.passwordConfirm) &&
+			(this.state.password.length >= this.MIN_PASSWORD_LENGTH)
+		)
 	}
 	// make 'Sign Up' button DISABLED until the truth condition
 	// this.validateEmail() && this.validatePassword() is satisfied
@@ -33,6 +33,7 @@ class SignUpForm extends React.Component {
 		if (this.validateEmail() && this.validatePassword()) {
 			signUpNewUser(this.state.email, this.state.password);
 		} else {
+			console.log(this.state.password);
 			console.log('something wrong still not letting u sign up yet');
 			this.setState({
 				email: '',
@@ -51,24 +52,28 @@ class SignUpForm extends React.Component {
 						type="text"
 						name="email"
 						value={this.state.email}
+						placeholder="email"
 						onChange={this.handleChange}
 					/>
 					<input
 						type="text"
 						name="emailConfirm"
 						value={this.state.emailConfirm}
+						placeholder="confirm email"
 						onChange={this.handleChange}
 					/>
 					<input
 						type="password"
 						name="password"
 						value={this.state.password}
+						placeholder="password (at least 6 characters)"
 						onChange={this.handleChange}
 					/>
 					<input
 						type="password"
 						name="passwordConfirm"
 						value={this.state.passwordConfirm}
+						placeholder="confirm password"
 						onChange={this.handleChange}
 					/>
 					<input
