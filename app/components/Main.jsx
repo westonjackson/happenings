@@ -1,6 +1,6 @@
 import React from 'react';
 import { Switch, Route, Redirect } from 'react-router-dom';
-import base from '../utils/rebase';
+import { getAuth } from '../utils/auth';
 
 import MainFeed from './MainFeed';
 import DiscoverFeed from './DiscoverFeed';
@@ -11,7 +11,7 @@ import LoginForm from './LoginForm';
 class Main extends React.Component {
 	constructor() {
 		super();
-		this.auth = base.initializedApp.auth();
+		this.auth = getAuth();
 		this.state = {
 			loggedIn: false,
 			gotAuth: false
@@ -33,7 +33,9 @@ class Main extends React.Component {
 				<Route exact path='/' render={() => (
 					this.state.loggedIn ? (<MainFeed />) : (<PublicLanding />)
 				)} />
-				<Route path='/discover' component={DiscoverFeed} />
+				<Route path='/discover' render={() => (
+					this.state.loggedIn ? (<DiscoverFeed />) : (<PublicLanding />)
+				)} />
 				<Route path='/signup' component={SignUpForm} />
 				<Route path='/login' component={LoginForm} />
 			</Switch>

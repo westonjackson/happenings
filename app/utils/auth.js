@@ -1,10 +1,10 @@
 import firebase from 'firebase';
 import base from '../utils/rebase';
-import 'whatwg-fetch';
 
-// create a form that allows users to register with the app
-// using their email address and password.
-// first validate them, adn then pass them to this method.
+/**
+ * Functions for handling all authentication flows
+ */
+
 export function signUpNewUser(email, password) {
 	const auth = base.initializedApp.auth();
 	auth.createUserWithEmailAndPassword(email, password).then((response) => {
@@ -20,7 +20,6 @@ export function signInWithEmailAndPassword(email, password) {
 	const auth = base.initializedApp.auth();
 	auth.signInWithEmailAndPassword(email, password).then((response) => {
 		console.log('signed in!');
-		console.log(response);
 	}).catch((error) => {
 		var errorCode = error.code;
 		var errorMessage = error.message;
