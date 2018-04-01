@@ -7,6 +7,7 @@ import DiscoverFeed from './DiscoverFeed';
 import SignUpForm from './SignUpForm';
 import PublicLanding from './PublicLanding';
 import LoginForm from './LoginForm';
+import ProfilePage from './ProfilePage';
 
 class Main extends React.Component {
 	constructor() {
@@ -38,6 +39,7 @@ class Main extends React.Component {
 				)} />
 				<Route path='/signup' component={SignUpForm} />
 				<Route path='/login' component={LoginForm} />
+				<Route path='/user/:user_id' component={ProfilePage} />
 			</Switch>
 		);
 		return (this.state.gotAuth ? ret : loader)

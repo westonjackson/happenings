@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { Link } from 'react-router-dom';
 import { getPaginatedFeed } from '../utils/';
 import Comment from './Comment.jsx';
 
@@ -71,10 +72,15 @@ class Post extends React.Component {
 				>~ load more comments ~</span>
 			</div>
 		) : null;
+		const authorLink = (
+			<Link to={`/user/${this.props.author.uid}`}>
+				{this.props.author.full_name}
+			</Link>
+		);
 
 		return (
 			<div className='post-container'>
-				<div className='post-author'>{this.props.author.full_name}</div>
+				<div className='post-author'>{authorLink}</div>
 				<img src={this.props.full_url} height="300" width="300"></img>
 				<div className='comments-container'>
 					{caption}

@@ -1,14 +1,20 @@
 import firebase from 'firebase';
 import base from '../utils/rebase';
+import { saveUserData } from './user.js';
 
 /**
  * Functions for handling all authentication flows
  */
 
-export function signUpNewUser(email, password) {
+export function signUpNewUser(userInfo) {
 	const auth = base.initializedApp.auth();
-	auth.createUserWithEmailAndPassword(email, password).then((response) => {
-		console.log(response);
+	auth.createUserWithEmailAndPassword(userInfo.email, userInfo.password).then((response) => {
+		// this could also be set by Google sign in provider or something
+		const fullName = (userInfo.fullName || response.displayName);
+		const userName = userInfo.userName;
+		console.log('created account');
+		debugger;
+		saveUserData(response.uid, userName, fullName, response.photoURL);
 	}).catch((error) => {
 		var errorCode = error.code;
 		var errorMessage = error.message;

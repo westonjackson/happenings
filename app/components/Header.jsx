@@ -13,6 +13,9 @@ class Header extends React.Component {
 	componentDidMount() {
 		this.auth.onAuthStateChanged(user => this.setState({loggedIn: !!user}));
 	}
+	currentUserLink() {
+		return `/user/${this.auth.currentUser.uid}`;
+	}
 	render() {
 		const logOutBtn = (<div onClick={signUserOut}>Sign out</div>);
 		const logInBtn = (<Link to='/login'>Log in</Link>);
@@ -25,6 +28,7 @@ class Header extends React.Component {
 					<li><Link to='/'>feed</Link></li>
 					<li><Link to='/discover'>discover</Link></li>
 			        <li><Link to='/create'>create</Link></li>
+					{this.state.loggedIn && (<li><Link to={this.currentUserLink()}>My Profile</Link></li>)}
 					<li>{authLink}</li>
 				</ul>
 			</div>

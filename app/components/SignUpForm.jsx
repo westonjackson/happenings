@@ -3,12 +3,14 @@ import PropTypes from 'prop-types';
 import { signUpNewUser } from '../utils/auth';
 
 class SignUpForm extends React.Component {
-	state = {
+	initialState = {
 		email: '',
-		emailConfirm: '',
+		userName: '',
+		fullName: '',
 		password: '',
 		passwordConfirm: ''
 	}
+	state = this.initialState;
 
 	MIN_PASSWORD_LENGTH = 6;
 
@@ -17,8 +19,9 @@ class SignUpForm extends React.Component {
 			[event.target.name]: event.target.value
 		});
 	}
-	validateEmail = () => {
-		return (this.state.email == this.state.emailConfirm);
+	// TODO: "this username is already taken" etc
+	validateUserName = () => {
+		return this.state.userName == this.state.userName.toLowerCase();
 	}
 	validatePassword = () => {
 		return (
@@ -26,21 +29,16 @@ class SignUpForm extends React.Component {
 			(this.state.password.length >= this.MIN_PASSWORD_LENGTH)
 		)
 	}
-	// make 'Sign Up' button DISABLED until the truth condition
-	// this.validateEmail() && this.validatePassword() is satisfied
+	// TODO make 'Sign Up' button DISABLED until the truth condition
+	// this.validateUserName() && this.validatePassword() is satisfied
 	handleSubmit = (event) => {
 		event.preventDefault();
-		if (this.validateEmail() && this.validatePassword()) {
-			signUpNewUser(this.state.email, this.state.password);
+		if (this.validateUserName() && this.validatePassword()) {
+			const userInfo = this.state;
+			signUpNewUser(userInfo);
 		} else {
-			console.log(this.state.password);
-			console.log('something wrong still not letting u sign up yet');
-			this.setState({
-				email: '',
-				password: '',
-				emailConfirm: '',
-				passwordConfirm: '',
-			});
+			console.error('something wrong still not letting u sign up yet');
+			this.setState(this.initialState);
 		}
 	}
 	render() {
@@ -57,9 +55,16 @@ class SignUpForm extends React.Component {
 					/>
 					<input
 						type="text"
-						name="emailConfirm"
-						value={this.state.emailConfirm}
-						placeholder="confirm email"
+						name="userName"
+						value={this.state.userName}
+						placeholder="Username"
+						onChange={this.handleChange}
+					/>
+					<input
+						type="text"
+						name="fullName"
+						value={this.state.fullName}
+						placeholder="Full Name"
 						onChange={this.handleChange}
 					/>
 					<input

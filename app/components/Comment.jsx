@@ -1,17 +1,16 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-
+import { Link } from 'react-router-dom';
 class Comment extends React.Component {
 	buildAuthorUrl(authorObject) {
-		// TODO
-		return '/';
+		return `/user/${authorObject.uid}`;
 	}
 	render() {
 		const authorUrl = this.buildAuthorUrl(this.props.author);
 		const authorName = this.props.author.full_name;
 		return (
 			<div className='comment'>
-				<a href={authorUrl}>{authorName}</a> {this.props.text}
+				<Link to={authorUrl}>{authorName}</Link> {this.props.text}
 			</div>
 		)
 	}
