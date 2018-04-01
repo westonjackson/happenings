@@ -7,10 +7,10 @@ export function loadUserProfile(uid) {
 	return base.initializedApp.database().ref(`/people/${uid}`).once('value');
 }
 
+/**
+ * Saves public user data to the database after signup
+ */
 export function saveUserData(uid, userName, displayName, imageUrl) {
-	if (!displayName) {
-		displayName = 'Anonymous';
-	}
 	let searchFullName = displayName.toLowerCase();
 	let searchReversedFullName = searchFullName.split(' ').reverse().join(' ');
 	try {
@@ -19,7 +19,7 @@ export function saveUserData(uid, userName, displayName, imageUrl) {
 	} catch(e) {
 		console.error(e);
 	}
-	const payload = {
+	const userInfo = {
 		profile_picture: imageUrl,
 		username: userName,
 		full_name: displayName,
@@ -28,5 +28,5 @@ export function saveUserData(uid, userName, displayName, imageUrl) {
 			reversed_full_name: searchReversedFullName
 		}
 	};
-	return base.initializedApp.database().ref(`people/${uid}`).update(payload);
+	return base.initializedApp.database().ref(`people/${uid}`).update(userInfo);
 }

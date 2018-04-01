@@ -4,6 +4,8 @@ import { Link } from 'react-router-dom';
 import { getPaginatedFeed } from '../utils/';
 import Comment from './Comment.jsx';
 
+// TODO: post timestamp (1hr ago, 2d ago etc)
+
 class Post extends React.Component {
 	COMMENTS_PAGE_SIZE = 3;
 	state = {
@@ -16,7 +18,7 @@ class Post extends React.Component {
 			return { ...dict[key], key: key }
 		});
 	}
-	componentWillMount = () => {
+	componentWillMount() {
 		const postId = this.props.id;
 		this.fetchComments(postId).then(data => {
 			this.setState({
@@ -57,13 +59,6 @@ class Post extends React.Component {
 		});
 	}
 	render() {
-		const caption = (
-			<Comment
-				author={this.props.author}
-				text={this.props.caption}
-			/>			
-		);
-
 		const nextPageBtn = this.state.nextPage ? (
 			<div className='more-comments-btn'>
 				<span
@@ -83,7 +78,10 @@ class Post extends React.Component {
 				<div className='post-author'>{authorLink}</div>
 				<img src={this.props.full_url} height="300" width="300"></img>
 				<div className='comments-container'>
-					{caption}
+					<Comment
+						author={this.props.author}
+						text={this.props.caption}
+					/>
 					{nextPageBtn}
 					{this.addCommentsToPost()}
 				</div>

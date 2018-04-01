@@ -13,7 +13,7 @@ class Header extends React.Component {
 	componentDidMount() {
 		this.auth.onAuthStateChanged(user => this.setState({loggedIn: !!user}));
 	}
-	currentUserLink() {
+	currentUserPath() {
 		return `/user/${this.auth.currentUser.uid}`;
 	}
 	render() {
@@ -21,6 +21,7 @@ class Header extends React.Component {
 		const logInBtn = (<Link to='/login'>Log in</Link>);
 		const authLink = this.state.loggedIn ? logOutBtn : logInBtn;
 
+		// TODO: only show these nav links if a user is signed in
 		return (
 			<div className='nav-bar-container'>
 				<div className='header'>HAPPENINGS</div>
@@ -28,7 +29,7 @@ class Header extends React.Component {
 					<li><Link to='/'>feed</Link></li>
 					<li><Link to='/discover'>discover</Link></li>
 			        <li><Link to='/create'>create</Link></li>
-					{this.state.loggedIn && (<li><Link to={this.currentUserLink()}>My Profile</Link></li>)}
+					{this.state.loggedIn && (<li><Link to={this.currentUserPath()}>My Profile</Link></li>)}
 					<li>{authLink}</li>
 				</ul>
 			</div>

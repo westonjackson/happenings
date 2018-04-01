@@ -1,9 +1,9 @@
 import firebase from 'firebase';
 import base from '../utils/rebase';
-import { saveUserData } from './user.js';
+import { saveUserData } from './user';
 
 /**
- * Functions for handling all authentication flows
+ * Functions for handling all authentication related things
  */
 
 export function signUpNewUser(userInfo) {
@@ -12,8 +12,7 @@ export function signUpNewUser(userInfo) {
 		// this could also be set by Google sign in provider or something
 		const fullName = (userInfo.fullName || response.displayName);
 		const userName = userInfo.userName;
-		console.log('created account');
-		debugger;
+		// add public user info to the database
 		saveUserData(response.uid, userName, fullName, response.photoURL);
 	}).catch((error) => {
 		var errorCode = error.code;
@@ -45,24 +44,6 @@ export function signUserOut() {
 	});
 }
 
-// helper function to keep less code in components
 export function getAuth() {
 	return base.initializedApp.auth();
 }
-
-// firebase.auth().onAuthStateChanged(function(user) {
-//   if (user) {
-//     // User is signed in.
-//     var displayName = user.displayName;
-//     var email = user.email;
-//     var emailVerified = user.emailVerified;
-//     var photoURL = user.photoURL;
-//     var isAnonymous = user.isAnonymous;
-//     var uid = user.uid;
-//     var providerData = user.providerData;
-//     // ...
-//   } else {
-//     // User is signed out.
-//     // ...
-//   }
-// });
