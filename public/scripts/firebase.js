@@ -463,6 +463,7 @@ friendlyPix.Firebase = class {
         thumb_storage_uri: thumbRef.toString(),
         author: {
           uid: this.auth.currentUser.uid,
+          // username: somehow_pass_in_username_string_here
           full_name: this.auth.currentUser.displayName,
           profile_picture: this.auth.currentUser.photoURL
         }

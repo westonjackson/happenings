@@ -68,8 +68,8 @@ class Post extends React.Component {
 			</div>
 		) : null;
 		const authorLink = (
-			<Link to={`/user/${this.props.author.uid}`}>
-				{this.props.author.full_name}
+			<Link to={`/user/${this.props.author.username}`}>
+				{this.props.author.username}
 			</Link>
 		);
 
