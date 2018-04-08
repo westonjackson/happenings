@@ -27,9 +27,11 @@ class LoginForm extends React.Component {
 		this.setState({_isMounted: false})
 	}
 	handleChange = (event) => {
-		this.setState({
-			[event.target.name]: event.target.value
-		});
+		if (this.state._isMounted) {
+			this.setState({
+				[event.target.name]: event.target.value
+			});
+		}
 	}
 	validateForm() {
 		return this.state.email.length > 0 && this.state.password.length > 0;

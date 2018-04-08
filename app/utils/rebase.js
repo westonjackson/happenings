@@ -18,4 +18,5 @@ var config = {
 
 var app = firebase.initializeApp(config);
 var base = Rebase.createClass(app.database());
+
 export default base;

@@ -1,4 +1,5 @@
 import React from 'react';
+import base from '../utils/rebase';
 import { Link } from 'react-router-dom';
 import { getAuth, signUserOut } from '../utils/auth';
 
@@ -6,15 +7,25 @@ class Header extends React.Component {
 	constructor() {
 		super();
 		this.auth = getAuth();
+		this.database = base.initializedApp.database();
 		this.state = {
-			loggedIn: !!this.auth.currentUser
+			loggedIn: !!this.auth.currentUser, 
 		}
 	}
 	componentDidMount() {
-		this.auth.onAuthStateChanged(user => this.setState({loggedIn: !!user}));
+		this.auth.onAuthStateChanged(user => {
+			this.database.ref(`/people/${user.uid}`).once('value').then(snapshot => {
+				let userInfo = snapshot.val();
+				this.setState({
+					loggedIn: !!user,
+					userInfo: userInfo
+				});
+			})
+		});
 	}
 	currentUserPath() {
-		return `/user/${this.auth.currentUser.uid}`;
+		let username = this.state.userInfo.username;
+		return `/user/${username}`;
 	}
 	render() {
 		const logOutBtn = (<div onClick={signUserOut}>Sign out</div>);

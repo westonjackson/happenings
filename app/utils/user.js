@@ -2,9 +2,9 @@ import firebase from 'firebase';
 import base from './rebase';
 import latinize from 'latinize';
 
-export function loadUserProfile(uid) {
+export function loadUserData(username) {
 	let db = base.initializedApp.database();
-	return base.initializedApp.database().ref(`/people/${uid}`).once('value');
+	return db.ref('/people/').orderByChild('username').equalTo(username).once('value');
 }
 
 /**

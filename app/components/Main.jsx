@@ -39,7 +39,7 @@ class Main extends React.Component {
 				)} />
 				<Route path='/signup' component={SignUpForm} />
 				<Route path='/login' component={LoginForm} />
-				<Route path='/user/:user_id' component={ProfilePage} />
+				<Route path='/user/:username' component={ProfilePage} />
 			</Switch>
 		);
 		return (this.state.gotAuth ? ret : loader)

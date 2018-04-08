@@ -1,5 +1,6 @@
 import React from 'react';
-import { loadUserProfile } from '../utils/user';
+import { Redirect } from 'react-router-dom';
+import { loadUserData } from '../utils/user';
 
 /**
  * Publically viewable page, don't need to be signed in
@@ -10,9 +11,10 @@ class ProfilePage extends React.Component {
 		user: {}
 	}
 	componentWillMount() {
-		loadUserProfile(this.props.match.params.user_id).then(snapshot => {
+		loadUserData(this.props.match.params.username).then(snapshot => {
 			const userInfo = snapshot.val();
 			if (userInfo) {
+				console.log(userInfo)
 				this.setState({
 					user: userInfo,
 					gotUserInfo: true

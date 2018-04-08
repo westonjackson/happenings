@@ -57,7 +57,7 @@
       }
     },
     "people": {
-      ".indexOn": ["_search_index/full_name", "_search_index/reversed_full_name"],
+      ".indexOn": ["username", "_search_index/full_name", "_search_index/reversed_full_name"],
       ".read": true,
       "$uid": {
         ".write": "auth.uid === $uid",
