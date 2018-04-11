@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { getPaginatedFeed } from '../utils/index'
+import { getPosts } from '../utils/feed'
 import Post from './Post.jsx';
 
 // TODO: put a 'load more posts' button at the bottom
@@ -13,10 +13,7 @@ class PostFeed extends React.Component {
 		gotData: false
 	}
 	componentWillMount() {
-		this.getPosts()
-	}
-	getPosts() {
-		getPaginatedFeed(this.props.uri, this.PAGE_SIZE).then(data => {
+		getPosts(this.props.uri, this.PAGE_SIZE).then(data => {
 			this.setState({posts: data.entries, gotData: true});
 		})
 	}

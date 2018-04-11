@@ -2,9 +2,23 @@ import firebase from 'firebase';
 import base from './rebase';
 import latinize from 'latinize';
 
+let db = base.initializedApp.database();
+
 export function loadUserData(username) {
-	let db = base.initializedApp.database();
+	// let db = base.initializedApp.database();
 	return db.ref('/people/').orderByChild('username').equalTo(username).once('value');
+}
+
+// gets the number of followers a user has
+export function registerForFollowersCount(uid, callback) {
+	const ref = db.ref(`/followers/${uid}`);
+	ref.on('value', data => callback(data.numChildren()));
+}
+
+// gets the number of people a user is following
+export function registerForFollowingCount(uid, callback) {
+	const ref = db.ref(`/people/${uid}/following`);
+	ref.on('value', data => callback(data.numChildren()));
 }
 
 /**

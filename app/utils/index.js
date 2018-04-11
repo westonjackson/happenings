@@ -2,8 +2,10 @@ import firebase from 'firebase';
 import base from './rebase';
 import 'whatwg-fetch';
 
+const db = base.initializedApp.database();
+
 export function getPostData(postId) {
-	return postId;
+	return db.ref(`/posts/${postId}`).once('value');
 }
 
 export function deleteFromFeed(uri, key) {
