@@ -38,7 +38,10 @@ class ProfilePage extends React.Component {
 	loadUserStats(uid) {
 		registerForFollowersCount(uid, numFollowers => this.setState({ numFollowers }));
 		registerForFollowingCount(uid, numFollowing => this.setState({ numFollowing }));
-		this.setState({ numPosts: Object.keys(this.state.user.posts).length });
+		const numPosts = this.state.user.hasOwnProperty('posts') ? (
+			Object.keys(this.state.user.posts).length
+			) : 0;
+		this.setState({ numPosts });
 		this.setState({ gotUserStats: true });
 	}
 	render() {
