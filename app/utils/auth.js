@@ -24,7 +24,6 @@ export function signUpNewUser(userInfo) {
 export function signInWithEmailAndPassword(email, password) {
 	const auth = base.initializedApp.auth();
 	auth.signInWithEmailAndPassword(email, password).then((response) => {
-		console.log('signed in!');
 	}).catch((error) => {
 		var errorCode = error.code;
 		var errorMessage = error.message;

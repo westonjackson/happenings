@@ -14,13 +14,15 @@ class Header extends React.Component {
 	}
 	componentDidMount() {
 		this.auth.onAuthStateChanged(user => {
-			this.database.ref(`/people/${user.uid}`).once('value').then(snapshot => {
-				let userInfo = snapshot.val();
-				this.setState({
-					loggedIn: !!user,
-					userInfo: userInfo
+			if (!!user) {
+				this.database.ref(`/people/${user.uid}`).once('value').then(snapshot => {
+					let userInfo = snapshot.val();
+					this.setState({
+						loggedIn: !!user,
+						userInfo: userInfo
+					});
 				});
-			})
+			}
 		});
 	}
 	currentUserPath() {
