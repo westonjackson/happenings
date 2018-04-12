@@ -1,43 +1,38 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
-import { getPaginatedFeed } from '../utils/';
+import { toArray } from '../utils/index';
+import { fetchComments, registerUserToLike } from '../utils/post';
 import Comment from './Comment.jsx';
 
 // TODO: post timestamp (1hr ago, 2d ago etc)
 
 class Post extends React.Component {
-	COMMENTS_PAGE_SIZE = 3;
 	state = {
 		comments: [],
 		gotComments: false,
 		nextPage: null,
+		isLiked: false
 	};
-	toArray(dict) {
-		return Object.keys(dict).map(key => {
-			return { ...dict[key], key: key }
-		});
-	}
 	componentWillMount() {
 		const postId = this.props.id;
-		this.fetchComments(postId).then(data => {
+		registerUserToLike(postId, isLiked => {
+			this.setState({ isLiked });
+		});
+		fetchComments(postId).then(data => {
 			this.setState({
-				comments: this.toArray(data.entries),
+				comments: toArray(data.entries),
 				gotComments: true,
 				nextPage: data.nextPage,
 			});
 		});
-	}
-	// TODO: Subscribe to new comments
-	fetchComments = (postId) => {
-		return getPaginatedFeed(`/comments/${postId}`, this.COMMENTS_PAGE_SIZE, null, false);
 	}
 	loadMoreComments = () => {
 		let currentComments = this.state.comments;
 		let callback = this.state.nextPage;
 		callback().then(data => {
 			this.setState({
-				comments: currentComments.concat(this.toArray(data.entries)),
+				comments: currentComments.concat(toArray(data.entries)),
 				gotComments: true,
 				nextPage: data.nextPage,
 			});

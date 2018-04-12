@@ -1,12 +1,9 @@
 import firebase from 'firebase';
 import base from './rebase';
 import 'whatwg-fetch';
+import { getPostData } from './post';
 
 const db = base.initializedApp.database();
-
-export function getPostData(postId) {
-	return db.ref(`/posts/${postId}`).once('value');
-}
 
 export function deleteFromFeed(uri, key) {
 	return uri;
@@ -59,3 +56,10 @@ export function getPaginatedFeed(uri, pageSize, earliestEntryId = null, fetchPos
 		return {entries: entries, nextPage: nextPage}
 	});
 }
+
+// helper to flatten a dict of dicts to an array of dicts
+export function toArray(dict) {
+	return Object.keys(dict).map(key => {
+		return { ...dict[key], key: key }
+	});
+};
