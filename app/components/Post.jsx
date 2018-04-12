@@ -2,7 +2,11 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import { toArray } from '../utils/index';
-import { fetchComments, registerUserToLike } from '../utils/post';
+import { fetchComments, registerUserToLike,
+	registerForLikesCount, registerForCommentsCount, updateLike
+} from '../utils/post';
+
+import PostStats from './post/PostStats.jsx';
 import Comment from './Comment.jsx';
 
 // TODO: post timestamp (1hr ago, 2d ago etc)
@@ -12,13 +16,25 @@ class Post extends React.Component {
 		comments: [],
 		gotComments: false,
 		nextPage: null,
-		isLiked: false
+		isLiked: false,
+		likeCount: false,
+		commentCount: false
 	};
-	componentWillMount() {
-		const postId = this.props.id;
-		registerUserToLike(postId, isLiked => {
+	loadPostStats = () => {
+		// I need sagas this is messy
+		registerUserToLike(this.props.id, isLiked => {
 			this.setState({ isLiked });
 		});
+		registerForLikesCount(this.props.id, likeCount => {
+			this.setState({ likeCount });
+		});
+		registerForCommentsCount(this.props.id, commentCount => {
+			this.setState({ commentCount });
+		});
+	}
+	componentWillMount() {
+		const postId = this.props.id;
+		this.loadPostStats();
 		fetchComments(postId).then(data => {
 			this.setState({
 				comments: toArray(data.entries),
@@ -67,11 +83,17 @@ class Post extends React.Component {
 				{this.props.author.username}
 			</Link>
 		);
-
 		return (
 			<div className='post-container'>
 				<div className='post-author'>{authorLink}</div>
 				<img src={this.props.full_url} height="300" width="300"></img>
+
+				<PostStats
+					likeCount={this.state.likeCount}
+					commentCount={this.state.commentCount}
+					isLiked={this.state.isLiked}
+				/>
+
 				<div className='comments-container'>
 					<Comment
 						author={this.props.author}

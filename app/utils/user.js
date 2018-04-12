@@ -5,11 +5,14 @@ import latinize from 'latinize';
 let db = base.initializedApp.database();
 
 export function loadUserData(username) {
-	// let db = base.initializedApp.database();
 	return db.ref('/people/').orderByChild('username').equalTo(username).once('value');
 }
 
-// gets the number of followers a user has
+/**
+ * Listens to updates on the followers of a person and calls the callback with followers counts.
+ * TODO: This won't scale if a user has a huge amount of followers. We need to keep track of a
+ *       follower count instead.
+ */
 export function registerForFollowersCount(uid, callback) {
 	const ref = db.ref(`/followers/${uid}`);
 	ref.on('value', data => callback(data.numChildren()));
@@ -44,3 +47,5 @@ export function saveUserData(uid, userName, displayName, imageUrl) {
 	};
 	return base.initializedApp.database().ref(`people/${uid}`).update(userInfo);
 }
+
+// TODO: deleteUserData
