@@ -56,6 +56,6 @@ export function registerForCommentsCount(postId, callback) {
  */
 export function updateLike(postId, value) {
 	return db.ref(`/likes/${postId}/${auth.currentUser.uid}`).set(
-		value ? db.ServerValue.TIMESTAMP : null
+		value ? firebase.database.ServerValue.TIMESTAMP : null
 	);
 }

@@ -92,9 +92,11 @@ class Post extends React.Component {
 					likeCount={this.state.likeCount}
 					commentCount={this.state.commentCount}
 					isLiked={this.state.isLiked}
+					updateLike={(val) => updateLike(this.props.id, val)}
 				/>
 
 				<div className='comments-container'>
+					{/*The first comment is the post status!*/}
 					<Comment
 						author={this.props.author}
 						text={this.props.caption}

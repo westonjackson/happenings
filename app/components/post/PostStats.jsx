@@ -2,6 +2,10 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 class PostStats extends React.Component {
+	updateLike = () => {
+		const newVal = !this.props.isLiked;
+		this.props.updateLike(newVal);
+	}
 	render() {
 		// grammar lol
 		const likesNoun = this.props.likeCount == 1 ? 'like' : 'likes';
@@ -12,6 +16,7 @@ class PostStats extends React.Component {
 			<div>
 				<div>{`${this.props.likeCount} ${likesNoun}`}</div>
 				<div>{`${this.props.commentCount} ${commentsNoun}`}</div>
+				<div onClick={this.updateLike}>{likeBtnText}</div>
 			</div>
 		);
 	}
