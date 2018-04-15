@@ -1,8 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { getUserFeedPosts } from '../utils/feed';
+import { getUserFeedPosts } from '../../utils/feed';
 
-import Post from './post/Post.jsx';
+import Post from '../post/Post.jsx';
 
 /**
  * Publically viewable page, don't need to be signed in

@@ -21,12 +21,12 @@ class PostStats extends React.Component {
 		);
 	}
 }
-// PostStats.propTypes = {
-// 	likeCount: PropTypes.number,
-// 	commentCount: PropTypes.number,
-// 	isLiked: PropTypes.bool,
-// 	updateLike: PropTypes.func,
-// 	updateAttending: PropTypes.func
-// }
+PostStats.propTypes = {
+	likeCount: PropTypes.number,
+	commentCount: PropTypes.number,
+	isLiked: PropTypes.bool,
+	updateLike: PropTypes.func,
+	updateAttending: PropTypes.func
+}
 
 export default PostStats;

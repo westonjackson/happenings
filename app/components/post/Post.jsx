@@ -17,9 +17,6 @@ class Post extends React.Component {
 		comments: [],
 		gotComments: false,
 		nextPage: null,
-		isLiked: false,
-		likeCount: false,
-		commentCount: false
 	};
 	loadPostStats = () => {
 		// I need sagas this is messy

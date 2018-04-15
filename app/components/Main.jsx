@@ -7,7 +7,7 @@ import DiscoverFeed from './DiscoverFeed';
 import SignUpForm from './SignUpForm';
 import PublicLanding from './PublicLanding';
 import LoginForm from './LoginForm';
-import ProfilePage from './ProfilePage';
+import ProfilePage from './profile/ProfilePage';
 
 class Main extends React.Component {
 	constructor() {
