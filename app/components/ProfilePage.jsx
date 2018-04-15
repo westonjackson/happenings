@@ -13,7 +13,7 @@ class ProfilePage extends React.Component {
 	state = {
 		user: {}
 	}
-	componentWillMount() {
+	componentDidMount() {
 		loadUserData(this.props.match.params.username).then(snapshot => {
 			const userInfo = snapshot.val();
 			if (userInfo) {

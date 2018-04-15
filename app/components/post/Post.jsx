@@ -1,12 +1,13 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
-import { toArray } from '../utils/index';
+
+import { toArray } from '../../utils/index';
 import { fetchComments, registerUserToLike,
 	registerForLikesCount, registerForCommentsCount, updateLike
-} from '../utils/post';
+} from '../../utils/post';
 
-import PostStats from './post/PostStats.jsx';
+import PostStats from './PostStats.jsx';
 import Comment from './Comment.jsx';
 
 // TODO: post timestamp (1hr ago, 2d ago etc)
@@ -32,7 +33,7 @@ class Post extends React.Component {
 			this.setState({ commentCount });
 		});
 	}
-	componentWillMount() {
+	componentDidMount() {
 		const postId = this.props.id;
 		this.loadPostStats();
 		fetchComments(postId).then(data => {

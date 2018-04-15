@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { getPosts } from '../utils/feed'
-import Post from './Post.jsx';
+import Post from './post/Post.jsx';
 
 // TODO: put a 'load more posts' button at the bottom
 // this button should utilize the pagination callback that is returned by getPaginatedFeed
