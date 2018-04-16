@@ -20,7 +20,16 @@ class ProfilePage extends React.Component {
 			user: {}
 		}
 	}
+	componentWillReceiveProps(nextProps) {
+		if (nextProps.location.pathname != this.props.location.pathname) {
+			// TODO: more elegant way of handling this.
+			window.location.reload();
+		}
+	}
 	componentDidMount() {
+		this.initUserPage();
+	}
+	initUserPage() {
 		loadUserData(this.props.match.params.username).then(snapshot => {
 			const userInfo = snapshot.val();
 			if (userInfo) {

@@ -109,14 +109,12 @@ class Post extends React.Component {
 			<div className='post-container'>
 				<div className='post-author'>{authorLink}</div>
 				<img src={this.props.full_url} height="300" width="300"></img>
-
 				<PostStats
 					likeCount={this.state.likeCount}
 					commentCount={this.state.commentCount}
 					isLiked={this.state.isLiked}
 					updateLike={(val) => this.updateLike(this.props.id, val)}
 				/>
-
 				<div className='comments-container'>
 					{/*The first comment is the post status!*/}
 					<Comment
@@ -124,7 +122,7 @@ class Post extends React.Component {
 						text={this.props.caption}
 					/>
 					{nextPageBtn}
-					{this.addCommentsToPost()}
+					{this.state.gotComments && this.addCommentsToPost()}
 				</div>
 			</div>
 		)

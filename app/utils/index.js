@@ -59,7 +59,7 @@ export function getPaginatedFeed(uri, pageSize, earliestEntryId = null, fetchPos
 }
 
 /**
- * Follow/Unfollow a user and return a promise once that's done.
+ * Follow or Unfollow a user and return a promise once that's done.
  *
  * If the user is now followed we'll add all his posts to the home feed of the follower.
  * If the user is now not followed anymore all his posts are removed from the follower home feed.
