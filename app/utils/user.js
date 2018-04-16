@@ -1,6 +1,8 @@
 import firebase from 'firebase';
 import base from './rebase';
 import latinize from 'latinize';
+import { getAuth } from './auth';
+import { toggleFollowUser } from './index';
 
 let db = base.initializedApp.database();
 
@@ -22,6 +24,23 @@ export function registerForFollowersCount(uid, callback) {
 export function registerForFollowingCount(uid, callback) {
 	const ref = db.ref(`/people/${uid}/following`);
 	ref.on('value', data => callback(data.numChildren()));
+}
+
+// Starts tracking the "Follow" button status.
+function registerToFollowStatusUpdate(currentUserId, uid, callback) {
+	const ref = db.ref(`/people/${currentUserId}/following/${uid}`);
+	ref.on('value', callback);
+}
+
+export function trackFollowStatus(uid, callback) {
+	const auth = getAuth();
+	if (auth.currentUser) {
+		registerToFollowStatusUpdate(auth.currentUser.uid, uid, callback);
+	}
+}
+
+export function updateFollow(uid, val) {
+	toggleFollowUser(uid, val);
 }
 
 /**

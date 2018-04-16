@@ -8,7 +8,8 @@ import ProfilePosts from './ProfilePosts';
 import ProfileStats from './ProfileStats.jsx';
 
 /**
- * Publically viewable page, don't need to be signed in
+ * Publically viewable page, don't need to be signed in. Will redirect to
+ * public landing if 'like' or 'follow' is clicked with no signed in user.
  */
  
 class ProfilePage extends React.Component {
@@ -20,28 +21,26 @@ class ProfilePage extends React.Component {
 		}
 	}
 	componentDidMount() {
-		if (this.auth.currentUser) {
-			loadUserData(this.props.match.params.username).then(snapshot => {
-				const userInfo = snapshot.val();
-				if (userInfo) {
-					const uid = Object.keys(userInfo)[0]; //s im sorry
-					this.setState({
-						user: userInfo[uid],
-						uid: uid,
-						gotUserInfo: true
-					});
-					// after getting base user info,
-					// get following and follower info
-					this.loadUserStats(this.state.uid);
+		loadUserData(this.props.match.params.username).then(snapshot => {
+			const userInfo = snapshot.val();
+			if (userInfo) {
+				const uid = Object.keys(userInfo)[0]; //s im sorry
+				this.setState({
+					user: userInfo[uid],
+					uid: uid,
+					gotUserInfo: true
+				});
+				// after getting base user info,
+				// get following and follower info
+				this.loadUserStats(this.state.uid);
 
-				} else {
-					console.error('404 not found');
-					this.setState({
-						userNotFound: true
-					});
-				}
-			});
-		}
+			} else {
+				console.error('404 not found');
+				this.setState({
+					userNotFound: true
+				});
+			}
+		});
 	}
 	loadUserStats(uid) {
 		registerForFollowersCount(uid, numFollowers => this.setState({ numFollowers }));
@@ -53,7 +52,7 @@ class ProfilePage extends React.Component {
 		this.setState({ gotUserStats: true });
 	}
 	render() {
-		if (this.state.userNotFound || !this.auth.currentUser) {
+		if (this.state.userNotFound) {
 			// TODO - make a custom 404 page
 			return (<Redirect to='/'/>);
 		} else {

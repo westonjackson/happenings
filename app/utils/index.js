@@ -2,6 +2,7 @@ import firebase from 'firebase';
 import base from './rebase';
 import 'whatwg-fetch';
 import { getPostData } from './post';
+import { getAuth } from './auth';
 
 const db = base.initializedApp.database();
 
@@ -55,6 +56,37 @@ export function getPaginatedFeed(uri, pageSize, earliestEntryId = null, fetchPos
 		}
 		return {entries: entries, nextPage: nextPage}
 	});
+}
+
+/**
+ * Follow/Unfollow a user and return a promise once that's done.
+ *
+ * If the user is now followed we'll add all his posts to the home feed of the follower.
+ * If the user is now not followed anymore all his posts are removed from the follower home feed.
+ */
+export function toggleFollowUser(followedUserId, follow) {
+	const auth = getAuth();
+	return db.ref(`/people/${followedUserId}/posts`).once('value').then(
+		data => {
+			const payload = {};
+			let lastPostId = true;
+
+			// add or remove followed user's posts to the home feed.
+			data.forEach(post => {
+				payload[`/feed/${auth.currentUser.uid}/${post.key}`] = follow ? !!follow : null;
+				lastPostId = post.key;
+			});
+			// add or remove the signed-in user to the list of followers.
+			payload[`/followers/${followedUserId}/${auth.currentUser.uid}`] =
+				follow ? !!follow : null;
+
+			// add or remove followed user to the 'following' list.
+			payload[`/people/${auth.currentUser.uid}/following/${followedUserId}`] =
+				follow ? lastPostId : null;
+
+			return db.ref().update(payload);
+		}
+	);
 }
 
 // helper to flatten a dict of dicts to an array of dicts
