@@ -2,9 +2,10 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 
+import { getAuth } from '../../utils/auth';
 import { toArray } from '../../utils/index';
 import { fetchComments, registerUserToLike,
-	registerForLikesCount, registerForCommentsCount, updateLike
+	registerForLikesCount, registerForCommentsCount, updateLike as _updateLike
 } from '../../utils/post';
 
 import PostStats from './PostStats.jsx';
@@ -13,6 +14,7 @@ import Comment from './Comment.jsx';
 // TODO: post timestamp (1hr ago, 2d ago etc)
 
 class Post extends React.Component {
+	auth = getAuth();
 	state = {
 		comments: [],
 		gotComments: false,
@@ -20,9 +22,13 @@ class Post extends React.Component {
 	};
 	loadPostStats = () => {
 		// I need sagas this is messy
-		registerUserToLike(this.props.id, isLiked => {
-			this.setState({ isLiked });
-		});
+		if (this.auth.currentUser) {
+			registerUserToLike(this.props.id, isLiked => {
+				this.setState({ isLiked });
+			});
+		} else {
+			this.setState({ isLiked: false});
+		}
 		registerForLikesCount(this.props.id, likeCount => {
 			this.setState({ likeCount });
 		});
@@ -30,26 +36,36 @@ class Post extends React.Component {
 			this.setState({ commentCount });
 		});
 	}
+	componentWillMount() {
+		this.setState({_isMounted: true});
+	}
+	componentWillUnmount() {
+		this.setState({_isMounted: false});
+	}
 	componentDidMount() {
-		const postId = this.props.id;
 		this.loadPostStats();
+		const postId = this.props.id;
 		fetchComments(postId).then(data => {
-			this.setState({
-				comments: toArray(data.entries),
-				gotComments: true,
-				nextPage: data.nextPage,
-			});
+			if (this.state._isMounted) {
+				this.setState({
+					comments: toArray(data.entries),
+					gotComments: true,
+					nextPage: data.nextPage,
+				});
+			}
 		});
 	}
 	loadMoreComments = () => {
 		let currentComments = this.state.comments;
 		let callback = this.state.nextPage;
 		callback().then(data => {
-			this.setState({
-				comments: currentComments.concat(toArray(data.entries)),
-				gotComments: true,
-				nextPage: data.nextPage,
-			});
+			if (this.state._isMounted) {
+				this.setState({
+					comments: currentComments.concat(toArray(data.entries)),
+					gotComments: true,
+					nextPage: data.nextPage,
+				});
+			}
 		});
 	}
 	addCommentsToPost() {
@@ -66,6 +82,14 @@ class Post extends React.Component {
 				/>
 			)
 		});
+	}
+	updateLike(postId, val) {
+		if (this.auth.currentUser) {
+			_updateLike(postId, val);
+		} else {
+			// TODO: redirect to the public landing page
+			console.log('create an account!');
+		}
 	}
 	render() {
 		const nextPageBtn = this.state.nextPage ? (
@@ -90,7 +114,7 @@ class Post extends React.Component {
 					likeCount={this.state.likeCount}
 					commentCount={this.state.commentCount}
 					isLiked={this.state.isLiked}
-					updateLike={(val) => updateLike(this.props.id, val)}
+					updateLike={(val) => this.updateLike(this.props.id, val)}
 				/>
 
 				<div className='comments-container'>
