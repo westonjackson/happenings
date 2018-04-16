@@ -1,7 +1,7 @@
 import React from 'react';
 import { Redirect } from 'react-router-dom';
 import { loadUserData, registerForFollowersCount, registerForFollowingCount,
-getUserPosts } from '../../utils/user';
+getUserPosts, trackFollowStatus, updateFollow } from '../../utils/user';
 import { getAuth } from '../../utils/auth';
 
 import ProfilePosts from './ProfilePosts';
@@ -33,6 +33,9 @@ class ProfilePage extends React.Component {
 				// after getting base user info,
 				// get following and follower info
 				this.loadUserStats(this.state.uid);
+				trackFollowStatus(this.state.uid, data => {
+					this.setState({ isFollowing: !!data.val() })
+				});
 
 			} else {
 				console.error('404 not found');
@@ -51,6 +54,14 @@ class ProfilePage extends React.Component {
 		this.setState({ numPosts });
 		this.setState({ gotUserStats: true });
 	}
+	toggleFollow = (val) => {
+		if (this.auth.currentUser) {
+			updateFollow(this.state.uid, val);
+		} else {
+			console.log('get an account!');
+			// TODO Redirect
+		}
+	}
 	render() {
 		if (this.state.userNotFound) {
 			// TODO - make a custom 404 page
@@ -59,15 +70,13 @@ class ProfilePage extends React.Component {
 			return (
 				<div>
 					<div>{this.state.user.full_name} ({this.state.user.username})</div>
-					<div>
-						{`followers: ${this.state.numFollowers}`}
-					</div>
-					<div>
-						{`following: ${this.state.numFollowing}`}
-					</div>
-					<div>
-						{`posts: ${this.state.numPosts}`}
-					</div>
+					<ProfileStats
+						numFollowers={this.state.numFollowers}
+						numFollowing={this.state.numFollowing}
+						numEvents={this.state.numPosts}
+						isFollowing={this.state.isFollowing}
+						toggleFollow={this.toggleFollow}
+					/>
 					{ this.state.gotUserInfo && 
 						<ProfilePosts
 							uid={this.state.uid}
