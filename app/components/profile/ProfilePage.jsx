@@ -75,25 +75,24 @@ class ProfilePage extends React.Component {
 		if (this.state.userNotFound) {
 			// TODO - make a custom 404 page
 			return (<Redirect to='/'/>);
-		} else {
-			return (
-				<div>
-					<div>{this.state.user.full_name} ({this.state.user.username})</div>
-					<ProfileStats
-						numFollowers={this.state.numFollowers}
-						numFollowing={this.state.numFollowing}
-						numEvents={this.state.numPosts}
-						isFollowing={this.state.isFollowing}
-						toggleFollow={this.toggleFollow}
-					/>
-					{ this.state.gotUserInfo && 
-						<ProfilePosts
-							uid={this.state.uid}
-						/>
-					}
-				</div>
-			)
 		}
+		return (
+			<div>
+				<div>{this.state.user.full_name} ({this.state.user.username})</div>
+				<ProfileStats
+					numFollowers={this.state.numFollowers}
+					numFollowing={this.state.numFollowing}
+					numEvents={this.state.numPosts}
+					isFollowing={this.state.isFollowing}
+					toggleFollow={this.toggleFollow}
+				/>
+				{ this.state.gotUserInfo && 
+					<ProfilePosts
+						uid={this.state.uid}
+					/>
+				}
+			</div>
+		)
 	}
 }
 
