@@ -9,14 +9,13 @@ class ProfileStats extends React.Component {
 	render() {
 		// grammar lol
 		const followNoun = this.props.numFollowers == 1 ? 'follower' : 'followers';
-		const commentsNoun = this.props.numFollowing == 1 ? 'comment' : 'comments';
 		const eventsNoun = this.props.numEvents == 1 ? 'event' : 'events';
-		const likeBtnText = this.props.isFollowing ? 'Following' : 'Follow';
+		const likeBtnText = this.props.isFollowing ? 'U R Following' : 'Follow';
 		return (
 			<div>
 				<div>{`${this.props.numEvents} ${eventsNoun}`}</div>
 				<div>{`${this.props.numFollowers} ${followNoun}`}</div>
-				<div>{`${this.props.numFollowing} ${commentsNoun}`}</div>
+				<div>{`${this.props.numFollowing} following`}</div>
 				<div onClick={this.toggleFollow}>{likeBtnText}</div>
 			</div>
 		);

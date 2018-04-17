@@ -39,13 +39,8 @@ class ProfilePage extends React.Component {
 					uid: uid,
 					gotUserInfo: true
 				});
-				// after getting base user info,
-				// get following and follower info
 				this.loadUserStats(this.state.uid);
-				trackFollowStatus(this.state.uid, data => {
-					this.setState({ isFollowing: !!data.val() })
-				});
-
+				this.loadFollowStatus(this.state.uid);
 			} else {
 				console.error('404 not found');
 				this.setState({
@@ -70,6 +65,11 @@ class ProfilePage extends React.Component {
 			console.log('get an account!');
 			// TODO Redirect
 		}
+	}
+	loadFollowStatus(uid) {
+		trackFollowStatus(uid, data => {
+			this.setState({ isFollowing: !!data.val() });
+		});
 	}
 	render() {
 		if (this.state.userNotFound) {
