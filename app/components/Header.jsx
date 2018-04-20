@@ -9,18 +9,27 @@ class Header extends React.Component {
 		this.auth = getAuth();
 		this.database = base.initializedApp.database();
 		this.state = {
-			loggedIn: !!this.auth.currentUser, 
+			loggedIn: !!this.auth.currentUser,
+			_isMounted: false
 		}
+	}
+	componentWillMount() {
+		this.setState({ _isMounted: true });
+	}
+	componentWillUnmount() {
+		this.setState({ _isMounted: false });
 	}
 	componentDidMount() {
 		this.auth.onAuthStateChanged(user => {
 			if (!!user) {
 				this.database.ref(`/people/${user.uid}`).once('value').then(snapshot => {
 					let userInfo = snapshot.val();
-					this.setState({
-						loggedIn: !!user,
-						userInfo: userInfo
-					});
+					if (this.state._isMounted) {
+						this.setState({
+							loggedIn: !!user,
+							userInfo: userInfo
+						});
+					}
 				});
 			}
 		});

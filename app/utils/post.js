@@ -2,6 +2,7 @@ import firebase from 'firebase';
 import base from './rebase';
 import { getPaginatedFeed } from './index';
 import { getAuth } from './auth';
+import { PAGE_SIZES } from '../constants';
 
 /**
  * Functions for handling all things related to an individual post
@@ -15,7 +16,7 @@ let auth = getAuth();
 
 //TODO: subscribe to new comments
  export function fetchComments(postId) {
- 	return getPaginatedFeed(`/comments/${postId}`, COMMENTS_PAGE_SIZE, null, false);
+ 	return getPaginatedFeed(`/comments/${postId}`, PAGE_SIZES.COMMENTS, null, false);
  }
 
  /**
