@@ -27,9 +27,7 @@ class PostFeed extends React.Component {
 	}
 	render() {
 		return (
-			<div>
-				<div>{ this.addPosts() }</div>
-			</div>
+			<div>{ this.addPosts() }</div>
 		);
 	}
 }
