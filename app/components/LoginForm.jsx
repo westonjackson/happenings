@@ -10,13 +10,16 @@ class LoginForm extends React.Component {
 		this.state = {
 			email: '',
 			password: '',
-			loggedIn: !!this.auth.currentUser
+			loggedIn: !!this.auth.currentUser,
+			_isMounted: false
 		}
 	}
 	componentDidMount() {
 		this.setState({_isMounted: true});
 		this.auth.onAuthStateChanged(user => {
-			this.setState({loggedIn: !!user})
+			if (this.state._isMounted) {
+				this.setState({loggedIn: !!user})
+			}
 		});
 	}
 	componentWillUnmount() {
