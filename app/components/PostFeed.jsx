@@ -7,18 +7,8 @@ import Post from './post/Post.jsx';
 // this button should utilize the pagination callback that is returned by getPaginatedFeed
 
 class PostFeed extends React.Component {
-	PAGE_SIZE = 5;
-	state = {
-		posts: {},
-		gotData: false
-	}
-	componentWillMount() {
-		getPosts(this.props.uri, this.PAGE_SIZE).then(data => {
-			this.setState({posts: data.entries, gotData: true});
-		})
-	}
 	addPosts() {
-		const posts = this.state.posts;
+		const posts = this.props.posts;
 		return Object.keys(posts).map(postId => {
 			let postData = posts[postId];
 			return (
@@ -38,14 +28,15 @@ class PostFeed extends React.Component {
 	render() {
 		return (
 			<div>
-				<div>{ this.state.gotData && this.addPosts() }</div>
+				<div>{ this.addPosts() }</div>
 			</div>
 		);
 	}
 }
 
 PostFeed.propTypes = {
-	uri: PropTypes.string,
+	posts: PropTypes.object,
+	nextPage: PropTypes.func,
 }
 
 export default PostFeed;
