@@ -19,19 +19,29 @@ class Header extends React.Component {
 	componentWillUnmount() {
 		this.setState({ _isMounted: false });
 	}
+	safeSetState = (state) => {
+		if (this.state._isMounted) {
+			this.setState(state);
+		}
+	}
 	componentDidMount() {
 		this.auth.onAuthStateChanged(user => {
 			if (!!user) {
 				this.database.ref(`/people/${user.uid}`).once('value').then(snapshot => {
 					let userInfo = snapshot.val();
-					if (this.state._isMounted) {
-						this.setState({
-							loggedIn: !!user,
-							userInfo: userInfo
-						});
-					}
+					this.safeSetState({
+						loggedIn: !!user,
+						userInfo: userInfo
+					});
 				});
 			}
+		});
+	}
+	signOut = () => {
+		signUserOut().then(() => {
+			this.safeSetState({ loggedIn: false });
+		}).catch((err) => {
+			console.log(err);
 		});
 	}
 	currentUserPath() {
@@ -39,7 +49,7 @@ class Header extends React.Component {
 		return `/user/${username}`;
 	}
 	render() {
-		const logOutBtn = (<div onClick={signUserOut}>Sign out</div>);
+		const logOutBtn = (<div onClick={this.signOut}>Sign out</div>);
 		const logInBtn = (<Link to='/login'>Log in</Link>);
 		const authLink = this.state.loggedIn ? logOutBtn : logInBtn;
 

@@ -36,11 +36,8 @@ export function signInWithEmailAndPassword(email, password) {
 }
 
 export function signUserOut() {
-	base.initializedApp.auth().signOut().then(() => {
-		console.log('bye');
-	}).catch((error) => {
-		alert(error.message);
-	});
+	console.log('bye');
+	return base.initializedApp.auth().signOut();
 }
 
 export function getAuth() {
