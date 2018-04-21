@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 
 import { getAuth } from '../../utils/auth';
 import { toArray } from '../../utils/index';
-import { fetchComments, registerUserToLike, addComment,
+import { fetchComments, registerUserToLike, addComment, subscribeToComments,
 	registerForLikesCount, registerForCommentsCount, updateLike as _updateLike
 } from '../../utils/post';
 
@@ -20,6 +20,7 @@ class Post extends React.Component {
 			comments: [],
 			gotComments: false,
 			nextPage: null,
+			mostRecentComment: null,
 		}
 	}
 	componentWillMount() {
@@ -33,15 +34,30 @@ class Post extends React.Component {
 			this.setState(state);
 		}
 	}
+	listenForNewComments = () => {
+		subscribeToComments(this.props.id, this.state.mostRecentComment,
+			(key, commentData) => {
+				const newComment = {...commentData, key};
+				const currentComments = this.state.comments;
+				this.safeSetState({
+					comments: currentComments.concat([newComment])
+				});
+			}
+		)
+	}
 	componentDidMount() {
 		this.loadPostStats();
 		const postId = this.props.id;
 		fetchComments(postId).then(data => {
+			const comments = toArray(data.entries);
+			const latestId = Object.keys(data.entries)[comments.length - 1];
 			this.safeSetState({
-				comments: toArray(data.entries),
+				comments: comments,
 				gotComments: true,
 				nextPage: data.nextPage,
+				mostRecentComment: latestId
 			});
+			this.listenForNewComments();
 		});
 	}
 	loadPostStats = () => {
@@ -62,8 +78,8 @@ class Post extends React.Component {
 	}
 	loadMoreComments = () => {
 		let currentComments = this.state.comments;
-		let callback = this.state.nextPage;
-		callback().then(data => {
+		let getNextPage = this.state.nextPage;
+		getNextPage().then(data => {
 			this.safeSetState({
 				comments: currentComments.concat(toArray(data.entries)),
 				gotComments: true,
@@ -96,7 +112,6 @@ class Post extends React.Component {
 	}
 	submitComment = (text) => {
 		if (this.auth.currentUser) {
-			console.log(this.auth.currentUser);
 			addComment(this.auth.currentUser, this.props.id, text)
 		}
 	}

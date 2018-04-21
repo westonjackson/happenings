@@ -59,6 +59,28 @@ export function getPaginatedFeed(uri, pageSize, earliestEntryId = null, fetchPos
 }
 
 /**
+ * Subscribes to receive updates to the given feed. The given `callback` function gets called
+ * for each new entry on the given feed.
+ *
+ * If provided we'll only listen to entries that were posted after `latestEntryId`. This allows to
+ * listen only for new feed entries after fetching existing entries using `_getPaginatedFeed()`.
+ *
+ * If needed the posts details can be fetched. This is useful for shallow post feeds.
+ * @private
+ */
+export function subscribeToFeed(uri, callback, latestEntryId = null, fetchPostDetails = false) {
+	let ref = db.ref(uri);
+	if (latestEntryId) {
+		ref = ref.orderByKey().startAt(latestEntryId);
+	}
+	ref.on('child_added', data => {
+		if (data.key !== latestEntryId) {
+			callback(data.key, data.val());
+		}
+	});
+}
+
+/**
  * Follow or Unfollow a user and return a promise once that's done.
  *
  * If the user is now followed we'll add all his posts to the home feed of the follower.

@@ -1,6 +1,6 @@
 import firebase from 'firebase';
 import base from './rebase';
-import { getPaginatedFeed, getUsername } from './index';
+import { getPaginatedFeed, subscribeToFeed, getUsername } from './index';
 import { getAuth } from './auth';
 import { PAGE_SIZES } from '../constants';
 
@@ -78,4 +78,8 @@ export function addComment(currentUser, postId, text) {
 		};
 		return db.ref(`/comments/${postId}`).push(comment);
 	});
+}
+
+export function subscribeToComments(postId, latestCommentId, callback) {
+	return subscribeToFeed(`/comments/${postId}`, callback, latestCommentId, false);
 }
