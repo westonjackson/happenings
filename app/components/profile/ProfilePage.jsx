@@ -26,15 +26,26 @@ class ProfilePage extends React.Component {
 			window.location.reload();
 		}
 	}
+	componentWillMount() {
+		this.setState({ _isMounted: true });
+	}
+	componentWillUnmount() {
+		this.setState({ _isMounted: false });
+	}
 	componentDidMount() {
 		this.initUserPage();
+	}
+	safeSetState = (state) => {
+		if (this.state._isMounted) {
+			this.setState(state)
+		}
 	}
 	initUserPage() {
 		loadUserData(this.props.match.params.username).then(snapshot => {
 			const userInfo = snapshot.val();
 			if (userInfo) {
 				const uid = Object.keys(userInfo)[0]; //s im sorry
-				this.setState({
+				this.safeSetState({
 					user: userInfo[uid],
 					uid: uid,
 					gotUserInfo: true
@@ -43,20 +54,20 @@ class ProfilePage extends React.Component {
 				this.loadFollowStatus(this.state.uid);
 			} else {
 				console.error('404 not found');
-				this.setState({
+				this.safeSetState({	
 					userNotFound: true
 				});
 			}
 		});
 	}
 	loadUserStats(uid) {
-		registerForFollowersCount(uid, numFollowers => this.setState({ numFollowers }));
-		registerForFollowingCount(uid, numFollowing => this.setState({ numFollowing }));
+		registerForFollowersCount(uid, numFollowers => this.safeSetState({ numFollowers }));
+		registerForFollowingCount(uid, numFollowing => this.safeSetState({ numFollowing }));
 		const numPosts = this.state.user.hasOwnProperty('posts') ? (
 			Object.keys(this.state.user.posts).length
 			) : 0;
-		this.setState({ numPosts });
-		this.setState({ gotUserStats: true });
+		this.safeSetState({ numPosts });
+		this.safeSetState({ gotUserStats: true });
 	}
 	toggleFollow = (val) => {
 		if (this.auth.currentUser) {
@@ -68,7 +79,7 @@ class ProfilePage extends React.Component {
 	}
 	loadFollowStatus(uid) {
 		trackFollowStatus(uid, data => {
-			this.setState({ isFollowing: !!data.val() });
+			this.safeSetState({ isFollowing: !!data.val() });
 		});
 	}
 	render() {

@@ -14,23 +14,26 @@ class LoginForm extends React.Component {
 			_isMounted: false
 		}
 	}
-	componentDidMount() {
+	componentWillMount() {
 		this.setState({_isMounted: true});
-		this.auth.onAuthStateChanged(user => {
-			if (this.state._isMounted) {
-				this.setState({loggedIn: !!user})
-			}
-		});
 	}
 	componentWillUnmount() {
 		this.setState({_isMounted: false});
 	}
-	handleChange = (event) => {
+	safeSetState = (state) => {
 		if (this.state._isMounted) {
-			this.setState({
-				[event.target.name]: event.target.value
-			});
+			this.setState(state);
 		}
+	}
+	componentDidMount() {
+		this.auth.onAuthStateChanged(user => {
+			this.safeSetState({loggedIn: !!user})
+		});
+	}
+	handleChange = (event) => {
+		this.safeSetState({
+			[event.target.name]: event.target.value
+		});
 	}
 	validateForm() {
 		return this.state.email.length > 0 && this.state.password.length > 0;

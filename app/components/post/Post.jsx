@@ -20,52 +20,53 @@ class Post extends React.Component {
 		gotComments: false,
 		nextPage: null,
 	};
-	loadPostStats = () => {
-		// I need sagas this is messy
-		if (this.auth.currentUser) {
-			registerUserToLike(this.props.id, isLiked => {
-				this.setState({ isLiked });
-			});
-		} else {
-			this.setState({ isLiked: false});
-		}
-		registerForLikesCount(this.props.id, likeCount => {
-			this.setState({ likeCount });
-		});
-		registerForCommentsCount(this.props.id, commentCount => {
-			this.setState({ commentCount });
-		});
-	}
 	componentWillMount() {
 		this.setState({_isMounted: true});
 	}
 	componentWillUnmount() {
 		this.setState({_isMounted: false});
 	}
+	safeSetState = (state) => {
+		if (this.state._isMounted) {
+			this.setState(state);
+		}
+	}
+	loadPostStats = () => {
+		// I need sagas this is messy
+		if (this.auth.currentUser) {
+			registerUserToLike(this.props.id, isLiked => {
+				this.safeSetState({ isLiked });
+			});
+		} else {
+			this.safeSetState({ isLiked: false});
+		}
+		registerForLikesCount(this.props.id, likeCount => {
+			this.safeSetState({ likeCount });
+		});
+		registerForCommentsCount(this.props.id, commentCount => {
+			this.safeSetState({ commentCount });
+		});
+	}
 	componentDidMount() {
 		this.loadPostStats();
 		const postId = this.props.id;
 		fetchComments(postId).then(data => {
-			if (this.state._isMounted) {
-				this.setState({
-					comments: toArray(data.entries),
-					gotComments: true,
-					nextPage: data.nextPage,
-				});
-			}
+			this.safeSetState({
+				comments: toArray(data.entries),
+				gotComments: true,
+				nextPage: data.nextPage,
+			});
 		});
 	}
 	loadMoreComments = () => {
 		let currentComments = this.state.comments;
 		let callback = this.state.nextPage;
 		callback().then(data => {
-			if (this.state._isMounted) {
-				this.setState({
-					comments: currentComments.concat(toArray(data.entries)),
-					gotComments: true,
-					nextPage: data.nextPage,
-				});
-			}
+			this.safeSetState({
+				comments: currentComments.concat(toArray(data.entries)),
+				gotComments: true,
+				nextPage: data.nextPage,
+			});
 		});
 	}
 	addCommentsToPost() {

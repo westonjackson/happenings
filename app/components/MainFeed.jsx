@@ -3,6 +3,7 @@ import PostFeed from './PostFeed';
 import { getPosts } from '../utils/feed';
 import { getAuth } from '../utils/auth';
 
+// TODO: Rename this to TimelineFeed or something
 class MainFeed extends React.Component {
 	constructor() {
 		super();
@@ -27,20 +28,21 @@ class MainFeed extends React.Component {
 			}
 		})
 	}
+	componentWillUnmount() {
+		this.setState({ _isMounted: false });
+	}
 	render() {
-		// this is the global posts feed for now.
-		const mainFeedURI = '/posts/';
 		const postFeed = (
 			<PostFeed
 				posts={this.state.posts}
 				nextPage={this.state.nextPage}
 			/>
-		)
+		);
 		return (
 			<div>
 				{this.state.gotPostData && postFeed}
 			</div>
-		)
+		);
 	}
 }
 
