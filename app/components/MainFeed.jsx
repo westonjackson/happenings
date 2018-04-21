@@ -18,6 +18,11 @@ class MainFeed extends React.Component {
 	}
 	componentWillMount() {
 		this.setState({ _isMounted: true });
+	}
+	componentWillUnmount() {
+		this.setState({ _isMounted: false });
+	}
+	componentDidMount() {
 		getPosts(this.URI, 5).then(data => {
 			if (this.state._isMounted) {
 				this.setState({
@@ -26,10 +31,7 @@ class MainFeed extends React.Component {
 					nextPage: data.nextPage,
 				});
 			}
-		})
-	}
-	componentWillUnmount() {
-		this.setState({ _isMounted: false });
+		});
 	}
 	render() {
 		const postFeed = (

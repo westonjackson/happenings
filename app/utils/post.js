@@ -1,6 +1,6 @@
 import firebase from 'firebase';
 import base from './rebase';
-import { getPaginatedFeed } from './index';
+import { getPaginatedFeed, getUsername } from './index';
 import { getAuth } from './auth';
 import { PAGE_SIZES } from '../constants';
 
@@ -59,4 +59,23 @@ export function updateLike(postId, value) {
 	return db.ref(`/likes/${postId}/${auth.currentUser.uid}`).set(
 		value ? firebase.database.ServerValue.TIMESTAMP : null
 	);
+}
+
+export function addComment(currentUser, postId, text) {
+	// this is sort of unacceptable in terms of performance
+	// should not need to ask the server for the username before we make a comment
+	getUsername(currentUser.uid).then(snapshot => {
+		const username = snapshot.val();
+		const comment = {
+			text: text,
+			timestamp: Date.now(),
+			author: {
+				uid: currentUser.uid,
+				full_name: currentUser.displayName,
+				profile_picture: currentUser.photoURL,
+				username: username
+			}
+		};
+		return db.ref(`/comments/${postId}`).push(comment);
+	});
 }

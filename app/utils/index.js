@@ -94,4 +94,8 @@ export function toArray(dict) {
 	return Object.keys(dict).map(key => {
 		return { ...dict[key], key: key }
 	});
-};
+}
+
+export function getUsername(uid) {
+	return db.ref(`/people/${uid}/username`).once('value');
+}

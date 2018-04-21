@@ -4,22 +4,24 @@ import { Link } from 'react-router-dom';
 
 import { getAuth } from '../../utils/auth';
 import { toArray } from '../../utils/index';
-import { fetchComments, registerUserToLike,
+import { fetchComments, registerUserToLike, addComment,
 	registerForLikesCount, registerForCommentsCount, updateLike as _updateLike
 } from '../../utils/post';
 
 import PostStats from './PostStats.jsx';
 import Comment from './Comment.jsx';
-
-// TODO: post timestamp (1hr ago, 2d ago etc)
+import AddCommentInput from './AddCommentInput.jsx';
 
 class Post extends React.Component {
-	auth = getAuth();
-	state = {
-		comments: [],
-		gotComments: false,
-		nextPage: null,
-	};
+	constructor() {
+		super();
+		this.auth = getAuth();
+		this.state = {
+			comments: [],
+			gotComments: false,
+			nextPage: null,
+		}
+	}
 	componentWillMount() {
 		this.setState({_isMounted: true});
 	}
@@ -30,6 +32,17 @@ class Post extends React.Component {
 		if (this.state._isMounted) {
 			this.setState(state);
 		}
+	}
+	componentDidMount() {
+		this.loadPostStats();
+		const postId = this.props.id;
+		fetchComments(postId).then(data => {
+			this.safeSetState({
+				comments: toArray(data.entries),
+				gotComments: true,
+				nextPage: data.nextPage,
+			});
+		});
 	}
 	loadPostStats = () => {
 		// I need sagas this is messy
@@ -47,17 +60,6 @@ class Post extends React.Component {
 			this.safeSetState({ commentCount });
 		});
 	}
-	componentDidMount() {
-		this.loadPostStats();
-		const postId = this.props.id;
-		fetchComments(postId).then(data => {
-			this.safeSetState({
-				comments: toArray(data.entries),
-				gotComments: true,
-				nextPage: data.nextPage,
-			});
-		});
-	}
 	loadMoreComments = () => {
 		let currentComments = this.state.comments;
 		let callback = this.state.nextPage;
@@ -69,7 +71,7 @@ class Post extends React.Component {
 			});
 		});
 	}
-	addCommentsToPost() {
+	addPostComments() {
 		const commentData = this.state.comments.sort((a, b) => {
 			return a.timestamp - b.timestamp
 		});
@@ -90,6 +92,12 @@ class Post extends React.Component {
 		} else {
 			// TODO: redirect to the public landing page
 			console.log('create an account!');
+		}
+	}
+	submitComment = (text) => {
+		if (this.auth.currentUser) {
+			console.log(this.auth.currentUser);
+			addComment(this.auth.currentUser, this.props.id, text)
 		}
 	}
 	render() {
@@ -123,7 +131,10 @@ class Post extends React.Component {
 						text={this.props.caption}
 					/>
 					{nextPageBtn}
-					{this.state.gotComments && this.addCommentsToPost()}
+					{this.state.gotComments && this.addPostComments()}
+					<AddCommentInput
+						addComment={this.submitComment}
+					/>
 				</div>
 			</div>
 		)
