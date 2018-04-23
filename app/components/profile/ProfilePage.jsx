@@ -3,6 +3,7 @@ import { Redirect } from 'react-router-dom';
 import { loadUserData, registerForFollowersCount, registerForFollowingCount,
 getUserPosts, trackFollowStatus, updateFollow } from '../../utils/user';
 import { getAuth } from '../../utils/auth';
+import { getUsername } from '../../utils/index';
 
 import ProfilePosts from './ProfilePosts';
 import ProfileStats from './ProfileStats.jsx';
@@ -17,7 +18,10 @@ class ProfilePage extends React.Component {
 		super();
 		this.auth = getAuth();
 		this.state = {
-			user: {}
+			user: {},
+			isCurrUser: false,
+			checkedCurrUser: false,
+			gotUserInfo: false
 		}
 	}
 	componentWillReceiveProps(nextProps) {
@@ -34,6 +38,7 @@ class ProfilePage extends React.Component {
 	}
 	componentDidMount() {
 		this.initUserPage();
+		this.checkCurrUser();
 	}
 	safeSetState = (state) => {
 		if (this.state._isMounted) {
@@ -59,6 +64,19 @@ class ProfilePage extends React.Component {
 				});
 			}
 		});
+	}
+	checkCurrUser() {
+		if (this.auth.currentUser) {
+			getUsername(this.auth.currentUser.uid).then(data => {
+				let userName = data.val();
+				if (userName === this.props.match.params.username) {
+					this.safeSetState({
+						isCurrUser: true
+					});
+				}
+				this.safeSetState({ checkedCurrUser: true });
+			});
+		}
 	}
 	loadUserStats(uid) {
 		registerForFollowersCount(uid, numFollowers => this.safeSetState({ numFollowers }));
@@ -89,18 +107,23 @@ class ProfilePage extends React.Component {
 		}
 		return (
 			<div>
-				<div>{this.state.user.full_name} ({this.state.user.username})</div>
-				<ProfileStats
-					numFollowers={this.state.numFollowers}
-					numFollowing={this.state.numFollowing}
-					numEvents={this.state.numPosts}
-					isFollowing={this.state.isFollowing}
-					toggleFollow={this.toggleFollow}
-				/>
 				{ this.state.gotUserInfo && 
-					<ProfilePosts
-						uid={this.state.uid}
-					/>
+					<div>
+					{this.state.user.full_name} ({this.state.user.username})
+						<ProfileStats
+							numFollowers={this.state.numFollowers}
+							numFollowing={this.state.numFollowing}
+							numEvents={this.state.numPosts}
+							isFollowing={this.state.isFollowing}
+							toggleFollow={this.toggleFollow}
+							uid={this.state.uid}
+							checkedCurrUser={this.state.checkedCurrUser}
+							isCurrUser={this.state.isCurrUser}
+						/>
+						<ProfilePosts
+							uid={this.state.uid}
+						/>
+					</div>
 				}
 			</div>
 		)
