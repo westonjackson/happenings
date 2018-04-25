@@ -9,6 +9,7 @@ import PublicLanding from './PublicLanding';
 import LoginForm from './LoginForm';
 import ProfilePage from './profile/ProfilePage';
 import PostPage from './PostPage.jsx';
+import AccountSettings from './account_settings/AccountSettings.jsx';
 
 class Main extends React.Component {
 	constructor() {
@@ -42,6 +43,7 @@ class Main extends React.Component {
 				<Route path='/login' component={LoginForm} />
 				<Route path='/user/:username' component={ProfilePage} />
 				<Route path='/event/:event_id' component={PostPage} />
+				<Route path='/settings' component={AccountSettings} />
 			</Switch>
 		);
 		return (this.state.gotAuth ? ret : loader)

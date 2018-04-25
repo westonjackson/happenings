@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { Link } from 'react-router-dom';
 
 class ProfileStats extends React.Component {
 	toggleFollow = () => {
@@ -21,14 +22,13 @@ class ProfileStats extends React.Component {
 			) : null;
 
 		const settings = (
-			<div>{'settings'}</div>
+			<div><Link to='/settings'>settings</Link></div>
 		);
 		const followBtn = (
 			<div onClick={this.toggleFollow}>{followBtnText}</div>
 		);
 		const btn = this.props.isCurrUser ? settings : followBtn;
 		const buttonDisp = this.props.checkedCurrUser ? btn : null;
-
 
 		return (
 			<div>

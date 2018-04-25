@@ -1,6 +1,6 @@
 import React from 'react';
 import { Redirect } from 'react-router-dom';
-import { loadUserData, registerForFollowersCount, registerForFollowingCount,
+import { loadUsernameData, registerForFollowersCount, registerForFollowingCount,
 getUserPosts, trackFollowStatus, updateFollow } from '../../utils/user';
 import { getAuth } from '../../utils/auth';
 import { getUsername } from '../../utils/index';
@@ -46,7 +46,7 @@ class ProfilePage extends React.Component {
 		}
 	}
 	initUserPage() {
-		loadUserData(this.props.match.params.username).then(snapshot => {
+		loadUsernameData(this.props.match.params.username).then(snapshot => {
 			const userInfo = snapshot.val();
 			if (userInfo) {
 				const uid = Object.keys(userInfo)[0]; //s im sorry

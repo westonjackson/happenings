@@ -6,9 +6,14 @@ import { toggleFollowUser } from './index';
 
 let db = base.initializedApp.database();
 
-export function loadUserData(username) {
+export function loadUsernameData(username) {
 	return db.ref('/people/').orderByChild('username').equalTo(username).once('value');
 }
+
+export function loadUserData(uid) {
+	return db.ref(`/people/${uid}`).once('value');
+}
+
 
 /**
  * Listens to updates on the followers of a person and calls the callback with followers counts.
