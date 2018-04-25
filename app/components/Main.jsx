@@ -2,12 +2,12 @@ import React from 'react';
 import { Switch, Route, Redirect } from 'react-router-dom';
 import { getAuth } from '../utils/auth';
 
-import MainFeed from './MainFeed';
-import DiscoverFeed from './DiscoverFeed';
-import SignUpForm from './SignUpForm';
-import PublicLanding from './PublicLanding';
-import LoginForm from './LoginForm';
-import ProfilePage from './profile/ProfilePage';
+import MainFeed from './feed/MainFeed.jsx';
+import DiscoverFeed from './feed/DiscoverFeed.jsx';
+import SignUpForm from './SignUpForm.jsx';
+import PublicLanding from './PublicLanding.jsx';
+import LoginForm from './LoginForm.jsx';
+import ProfilePage from './profile/ProfilePage.jsx';
 import PostPage from './PostPage.jsx';
 import AccountSettings from './account_settings/AccountSettings.jsx';
 

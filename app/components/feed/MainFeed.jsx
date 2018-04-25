@@ -1,7 +1,7 @@
 import React from 'react';
 import PostFeed from './PostFeed';
-import { getPosts } from '../utils/feed';
-import { getAuth } from '../utils/auth';
+import { getPosts } from '../../utils/feed';
+import { getAuth } from '../../utils/auth';
 
 // TODO: Rename this to TimelineFeed or something
 class MainFeed extends React.Component {
@@ -9,6 +9,7 @@ class MainFeed extends React.Component {
 		super();
 		this.auth = getAuth();
 		this.URI = '/posts/';
+		this.PAGE_SIZE = 5;
 		this.state = {
 			posts: {},
 			nextPage: null,
@@ -23,7 +24,7 @@ class MainFeed extends React.Component {
 		this.setState({ _isMounted: false });
 	}
 	componentDidMount() {
-		getPosts(this.URI, 5).then(data => {
+		getPosts(this.URI, this.PAGE_SIZE).then(data => {
 			if (this.state._isMounted) {
 				this.setState({
 					posts: data.entries,

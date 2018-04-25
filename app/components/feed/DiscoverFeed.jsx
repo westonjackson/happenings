@@ -1,7 +1,7 @@
 import React from 'react';
 import PostFeed from './PostFeed';
-import { getAuth } from '../utils/auth';
-import { updateDiscoverFeeds, getDiscoverFeedPosts } from '../utils/feed';
+import { getAuth } from '../../utils/auth';
+import { updateDiscoverFeeds, getDiscoverFeedPosts } from '../../utils/feed';
 
 // the Router will guarantee that this component only mounts if the user is signed in.
 class DiscoverFeed extends React.Component {
