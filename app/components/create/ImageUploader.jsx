@@ -63,4 +63,5 @@ class ImageUploader extends React.Component {
 ImageUploader.propTypes = {
 	onDrop: PropTypes.func,
 }
+
 export default ImageUploader;
