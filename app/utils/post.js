@@ -62,8 +62,9 @@ export function updateLike(postId, value) {
 }
 
 export function addComment(currentUser, postId, text) {
-	// this is sort of unacceptable in terms of performance
+	// TODO: this is sort of unacceptable in terms of performance
 	// should not need to ask the server for the username before we make a comment
+	// is there a way to store username globally without using Redux?
 	getUsername(currentUser.uid).then(snapshot => {
 		const username = snapshot.val();
 		const comment = {
