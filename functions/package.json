@@ -1,6 +1,6 @@
 {
-  "name": "friendlypix-functions",
-  "description": "Server-side micro services for FriendlyPix. Offensive Image blurring and New follower Notifications.",
+  "name": "happenings-functions",
+  "description": "Server-side micro services for Happenings. Offensive Image blurring and New follower Notifications.",
   "dependencies": {
     "@google-cloud/storage": "^1.2.1",
     "@google-cloud/vision": "^0.12.0",

@@ -1,0 +1,45 @@
+import React from 'react';
+import ImageUploader from './ImageUploader.jsx';
+import NewEventForm from './NewEventForm.jsx';
+
+class CreateEvent extends React.Component {
+	// need some sort of 'cancel' button htat removes the current preview
+	// and restores the imageuploader component
+	// switching between preview and imageupload dropbox should be handled by
+	// the ImageUploader component
+
+	// TODO: after successful creation by DB, display a link to the new event
+	// that the user can send their friends, etc
+	constructor() {
+		super();
+		this.state = {
+			imageLoaded: false,
+			eventImage: null
+		}
+	}
+	imageUploadCallback = (file) => {
+		this.setState({
+			imageLoaded: true,
+			eventImage: file
+		});
+	}
+	handleFormInput = (event) => {
+		console.log(event);
+	}
+	render() {
+		return (
+			<div className='img-upload-container'>
+				create event here
+				<ImageUploader
+					onDrop={this.imageUploadCallback}
+				/>
+				<NewEventForm
+					imgLoaded={this.state.imageLoaded}
+					handleFormInput={this.handleFormInput}
+				/>
+			</div>
+		)
+	}
+}
+
+export default CreateEvent;

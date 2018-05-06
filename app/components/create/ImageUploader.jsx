@@ -12,10 +12,24 @@ class ImageUploader extends React.Component {
 		}
 	}
 	clear = () => {
-		this.setState({
-			files: [],
-			fileLoaded: false
+		if (this.state.fileLoaded) {
+			this.clearLoadedFiles(this.state.files);
+			this.setState({
+				files: [],
+				fileLoaded: false
+			});
+		}
+	}
+	clearLoadedFiles = (files) => {
+		files.forEach(file => {
+			console.log('clearing ', file)
+			window.URL.revokeObjectURL(file);
 		});
+	}
+	componentWillUnmount() {
+		if (this.state.fileLoaded) {
+			this.clearLoadedFiles(this.state.files);
+		}
 	}
 	onDrop = (files) => {
 		this.setState({

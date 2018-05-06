@@ -13,7 +13,7 @@ import ProfilePage from './profile/ProfilePage.jsx';
 import PostPage from './PostPage.jsx';
 import AccountSettings from './account_settings/AccountSettings.jsx';
 
-import CreateEvent from './CreateEvent.jsx';
+import CreateEvent from './create/CreateEvent.jsx';
 
 class Main extends React.Component {
 	constructor() {
