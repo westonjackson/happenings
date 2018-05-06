@@ -6,7 +6,7 @@ import { toggleFollowUser } from './index';
 
 let db = base.initializedApp.database();
 
-export function loadUsernameData(username) {
+export function loadUserByUsername(username) {
 	return db.ref('/people/').orderByChild('username').equalTo(username).once('value');
 }
 
