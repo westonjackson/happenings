@@ -22,7 +22,6 @@ class ImageUploader extends React.Component {
 	}
 	clearLoadedFiles = (files) => {
 		files.forEach(file => {
-			console.log('clearing ', file)
 			window.URL.revokeObjectURL(file);
 		});
 	}
@@ -32,6 +31,7 @@ class ImageUploader extends React.Component {
 		}
 	}
 	onDrop = (files) => {
+		this.props.onDrop(files[0]);
 		this.setState({
 			files: files,
 			fileLoaded: true

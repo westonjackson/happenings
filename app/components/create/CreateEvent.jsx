@@ -2,6 +2,8 @@ import React from 'react';
 import ImageUploader from './ImageUploader.jsx';
 import NewEventForm from './NewEventForm.jsx';
 
+import { uploadEvent } from '../../utils/upload';
+
 class CreateEvent extends React.Component {
 	// need some sort of 'cancel' button htat removes the current preview
 	// and restores the imageuploader component
@@ -23,8 +25,18 @@ class CreateEvent extends React.Component {
 			eventImage: file
 		});
 	}
+	componentWillUnmount() {
+		if (this.state.eventImage) {
+			window.URL.revokeObjectURL(this.state.eventImage);
+		}
+	}
 	handleFormInput = (event) => {
-		console.log(event);
+		const pic = this.state.eventImage;
+		uploadEvent(event, pic, pic.name, response => {
+			window.URL.revokeObjectURL(pic);
+			console.log(response);
+			// TODO: redirect to individual event page
+		});
 	}
 	render() {
 		return (

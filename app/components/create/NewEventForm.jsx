@@ -73,7 +73,7 @@ class NewEventForm extends React.Component {
 				'location': this.state.location,
 				'description': this.state.description,
 				'timestamp': timeStamp,
-				'date_sring': dateString
+				'date_string': dateString
 			}
 			this.props.handleFormInput(payload)
 		}

@@ -2,11 +2,9 @@ import firebase from 'firebase';
 import base from './rebase';
 
 import { getAuth } from './auth';
+import { getUsername } from './index';
 
-export function uploadEvent(eventObj, pic, thumb, filename, callback) {
-	// first need to upload event pic to cloud storage
-	// then, create a new Event in the DB referencing it
-	// return a promise which completes with the new PostId.
+export function uploadEvent(eventObj, pic, fileName, callback) {
 
 	// firebase stuff sorry
 	let auth = getAuth();
@@ -25,25 +23,16 @@ export function uploadEvent(eventObj, pic, thumb, filename, callback) {
 		let url = snapshot.metadata.downloadURLs[0];
 		return url;
 	}).catch(error => {
-		// TODO -- figure better pattern for error handling using Promises.
 		callback(error)
 	});
 
-	// start the thumb file upload to Cloud storage
-	const thumbRef = storage.ref(`${auth.currentUser.uid}/thumb/${newPostKey}/${fileName}`);
-	const thumbUploadTask = thumbRef.put(pic, metadata).then(snapshot => {
-		var url = snapshot.metadata.downloadURLs[0];
-		return url;
-	}).catch(error => {
-		callback(error);
-	});
-
+	// this is sad
 	const usernameTask = getUsername(auth.currentUser.uid).then(snapshot => {
 		const username = snapshot.val();
 		return username;
 	});
 
-	var promises = [imgUploadTask, thumbUploadTask, usernameTask];
+	var promises = [imgUploadTask, usernameTask];
 
 	return Promise.all(promises).then(data => {
 		// once both image and thumb have been uploaded to storage, add a new record in DB
@@ -51,25 +40,29 @@ export function uploadEvent(eventObj, pic, thumb, filename, callback) {
 		const updates = {};
 		updates[`/posts/${newPostKey}`] = {
 			full_url: data[0],
-			thumb_url: data[1],
+			// thumb_url: data[1],
 			timestamp: firebase.database.ServerValue.TIMESTAMP,
 			full_storage_uri: imgRef.toString(),
-			thumb_storage_uri: thumbRef.toString(),
-			// TODO USERNAME
+			// thumb_storage_uri: thumbRef.toString(),
 			author: {
 				uid: auth.currentUser.uid,
 				full_name: auth.currentUser.displayName,
 				profile_picture: auth.currentUser.photoURL,
-				username: data[2];
-			}
+				username: data[1],
+			},
+			title: eventObj.title,
+			location: eventObj.location,
+			description: eventObj.description,
+			event_timestamp: eventObj.timestamp,
+			date_string: eventObj.date_string,
 		};
 		updates[`/people/${auth.currentUser.uid}/posts/${newPostKey}`] = true;
 		updates[`/feed/${auth.currentUser.uid}/${newPostKey}`] = true;
+		callback(updates);
 
-		return database.ref().update(updates).then(() => newPostKey);
+		return database.ref().update(updates).then(() => {
+			callback('DONE');
+			newPostKey;
+		});
 	});
-
-
-
-
 }
