@@ -47,6 +47,28 @@
         }
       }
     },
+    "attends_post": {
+      ".read": true,
+      "$postId": {
+        ".write": "!newData.exists() && !newData.parent().parent().child('posts').child($postId).exists()", // Allow deletes from the post owner
+        ".validate": "root.child('posts').child($postId).exists()", // Check that the post exists
+        "$uid": {
+          ".write": "auth.uid === $uid",
+          ".validate": "newData.val() === now"
+        }
+      }
+    },
+    "attends_user": {
+      ".read": true,
+      "$uid": {
+        ".write": "auth.uid === $uid",
+        ".validate": "true",
+        "$postId": {
+          ".write": "!newData.exists() && !newData.parent().parent().child('posts').child($postId).exists()",
+          ".validate": "root.child('posts').child($postId).exists()"
+        }
+      }
+    },
     "followers": {
       ".read": true,
       "$followedUid": {

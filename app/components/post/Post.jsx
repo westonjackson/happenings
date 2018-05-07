@@ -5,7 +5,8 @@ import { Link } from 'react-router-dom';
 import { getAuth } from '../../utils/auth';
 import { toArray } from '../../utils/index';
 import { fetchComments, registerUserToLike, addComment, subscribeToComments,
-	registerForLikesCount, registerForCommentsCount, updateLike as _updateLike
+	registerForLikesCount, registerForCommentsCount, updateLike as _updateLike,
+	updateAttending, registerUserAttendance, registerForAttendingCount
 } from '../../utils/post';
 
 import PostStats from './PostStats.jsx';
@@ -66,14 +67,17 @@ class Post extends React.Component {
 			registerUserToLike(this.props.id, isLiked => {
 				this.safeSetState({ isLiked });
 			});
+			registerUserAttendance(this.props.id, isAttending => {
+				this.safeSetState({ isAttending });
+			});
 		} else {
-			this.safeSetState({ isLiked: false});
+			this.safeSetState({ isLiked: false, isAttending: false});
 		}
 		registerForLikesCount(this.props.id, likeCount => {
 			this.safeSetState({ likeCount });
 		});
-		registerForCommentsCount(this.props.id, commentCount => {
-			this.safeSetState({ commentCount });
+		registerForAttendingCount(this.props.id, attendingCount => {
+			this.safeSetState({ attendingCount });
 		});
 	}
 	loadMoreComments = () => {
@@ -110,6 +114,14 @@ class Post extends React.Component {
 			console.log('create an account!');
 		}
 	}
+	updateAttend(postId, val) {
+		if (this.auth.currentUser) {
+			updateAttending(postId, val);
+		} else {
+			// TODO redirect to the public landing page
+			console.log('make an account!!');
+		}
+	}
 	submitComment = (text) => {
 		if (this.auth.currentUser) {
 			addComment(this.auth.currentUser, this.props.id, text)
@@ -135,9 +147,11 @@ class Post extends React.Component {
 				<img src={this.props.full_url} height="300" width="300"></img>
 				<PostStats
 					likeCount={this.state.likeCount}
-					commentCount={this.state.commentCount}
+					attendingCount={this.state.attendingCount}
 					isLiked={this.state.isLiked}
+					isAttending={this.state.isAttending}
 					updateLike={(val) => this.updateLike(this.props.id, val)}
+					updateAttending={(val) => this.updateAttend(this.props.id, val)}
 				/>
 				<div className='comments-container'>
 					{/*The first comment is the post status!*/}

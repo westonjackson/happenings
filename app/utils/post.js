@@ -27,6 +27,11 @@ export function registerUserToLike(postId, callback) {
 	ref.on('value', data => callback(!!data.val()));
 }
 
+export function registerUserAttendance(postId, callback) {
+	const ref = db.ref(`/attends_post/${postId}/${auth.currentUser.uid}`);
+	ref.on('value', data => callback(!!data.val()));
+}
+
 /**
  * gets post data such as image and caption
  */
@@ -52,6 +57,11 @@ export function registerForCommentsCount(postId, callback) {
 	ref.on('value', data => callback(data.numChildren()));
 }
 
+export function registerForAttendingCount(postId, callback) {
+	const ref = db.ref(`/attends_post/${postId}`);
+	ref.on('value', data => callback(data.numChildren()));
+}
+
 /**
  * Updates the like status of a post from the current user.
  */
@@ -59,6 +69,15 @@ export function updateLike(postId, value) {
 	return db.ref(`/likes/${postId}/${auth.currentUser.uid}`).set(
 		value ? firebase.database.ServerValue.TIMESTAMP : null
 	);
+}
+
+// organized by user then by post to more easily get 'all events a user is attending'
+export function updateAttending(postId, value) {
+	const attendVal = value ? firebase.database.ServerValue.TIMESTAMP : null;
+	const updates = {};
+	updates[`/attends_user/${auth.currentUser.uid}/${postId}`] = attendVal;
+	updates[`/attends_post/${postId}/${auth.currentUser.uid}`] = attendVal;
+	return db.ref().update(updates);
 }
 
 export function addComment(currentUser, postId, text) {
