@@ -80,7 +80,7 @@ export function uploadEvent(eventObj, pic, fileName, callback) {
 		updates[`/feed/${auth.currentUser.uid}/${newPostKey}`] = true;
 
 		return database.ref().update(updates).then(() => {
-			callback({status: 'SUCCESS', message: updates});
+			callback({status: 'SUCCESS', message: newPostKey});
 		});
 	});
 }

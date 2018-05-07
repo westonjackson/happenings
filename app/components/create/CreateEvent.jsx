@@ -1,4 +1,5 @@
 import React from 'react';
+import { Redirect } from 'react-router-dom';
 import ImageUploader from './ImageUploader.jsx';
 import NewEventForm from './NewEventForm.jsx';
 
@@ -16,7 +17,8 @@ class CreateEvent extends React.Component {
 		super();
 		this.state = {
 			imageLoaded: false,
-			eventImage: null
+			eventImage: null,
+			successFullyCreatedEvent: false
 		}
 	}
 	imageUploadCallback = (file) => {
@@ -34,11 +36,22 @@ class CreateEvent extends React.Component {
 		const pic = this.state.eventImage;
 		uploadEvent(event, pic, pic.name, response => {
 			window.URL.revokeObjectURL(pic);
+			if (response.status == 'SUCCESS') {
+				this.setState({
+					successFullyCreatedEvent: true,
+					newEventId: response.message
+				});
+			} else {
+				console.log('something went wrong, please reload page and try again.');
+			}
 			console.log(response);
 			// TODO: redirect to individual event page
 		});
 	}
 	render() {
+		if (this.state.successFullyCreatedEvent) {
+			return (<Redirect to={`/event/${this.state.newEventId}`} />)
+		}
 		return (
 			<div className='img-upload-container'>
 				create event here
