@@ -14,9 +14,12 @@ const COMMENTS_PAGE_SIZE = 3;
 let db = base.initializedApp.database();
 let auth = getAuth();
 
-//TODO: subscribe to new comments
  export function fetchComments(postId) {
  	return getPaginatedFeed(`/comments/${postId}`, PAGE_SIZES.COMMENTS, null, false);
+ }
+
+ export function subscribeToComments(postId, latestCommentId, callback) {
+ 	return subscribeToFeed(`/comments/${postId}`, callback, latestCommentId, false);
  }
 
  /**
@@ -100,6 +103,21 @@ export function addComment(currentUser, postId, text) {
 	});
 }
 
-export function subscribeToComments(postId, latestCommentId, callback) {
-	return subscribeToFeed(`/comments/${postId}`, callback, latestCommentId, false);
+export function deletePost(postId, picStorageUri, thumbStorageUri) {
+	return db.ref(`/attends_post/${postId}`).once('value', affiliatedUsers => {
+		const updates = {};
+		updates[`/people/${auth.currentUser.uid}/posts/${postId}`] = null;
+		updates[`/comments/${postId}`] = null;
+		updates[`/likes/${postId}`] = null;
+		updates[`/posts/${postId}`] = null;
+		updates[`/feed/${auth.currentUser.uid}/${postId}`] = null;
+		updates[`/attends_post/${postId}`] = null;
+
+		// for all users attending, clear this post from the events they are attending
+		Object.keys(affiliatedUsers.val()).forEach(userId => {
+			// TODO: maybe send some kind of notification to let them know its cancelled
+			updates[`/attends_user/${userId}/${postId}`] = null;
+		});
+		return db.ref().update(updates);
+	})
 }
