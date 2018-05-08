@@ -34,6 +34,7 @@ export function uploadEvent(eventObj, pic, fileName, callback) {
 
 	// start the pic upload to cloud storage
 	const imgRef = storage.ref(`${auth.currentUser.uid}/full/${newPostKey}/${fileName}`);
+
 	let imgUploadTask = imgRef.put(pic, metadata).then(snapshot => {
 		console.log('uploaded new pic of size ', snapshot.totalBytes, 'bytes.');
 		let url = snapshot.metadata.downloadURLs[0];
