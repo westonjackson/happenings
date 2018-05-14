@@ -23,16 +23,16 @@ export function signUpNewUser(userInfo) {
 
 export function signInWithEmailAndPassword(email, password) {
 	const auth = base.initializedApp.auth();
-	auth.signInWithEmailAndPassword(email, password).then((response) => {
-	}).catch((error) => {
-		var errorCode = error.code;
-		var errorMessage = error.message;
-		if (errorCode == 'auth/wrong-password') {
-			alert('wrong password');
-		} else {
-			alert(errorMessage);
-		}
-	})
+	return auth.signInWithEmailAndPassword(email, password)//.then((response) => {
+// 	}).catch((error) => {
+// 		var errorCode = error.code;
+// 		var errorMessage = error.message;
+// 		if (errorCode == 'auth/wrong-password') {
+// 			alert('wrong password');
+// 		} else {
+// 			alert(errorMessage);
+// 		}
+// 	});
 }
 
 export function signUserOut() {

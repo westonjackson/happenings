@@ -7,7 +7,7 @@ import DiscoverFeed from './feed/DiscoverFeed.jsx';
 
 import PublicLanding from './PublicLanding.jsx';
 import SignUpForm from './SignUpForm.jsx';
-import LoginForm from './LoginForm.jsx';
+import LoginFormContainer from './LoginFormContainer.js';
 
 import ProfilePage from './profile/ProfilePage.jsx';
 import PostPage from './PostPage.jsx';
@@ -44,7 +44,7 @@ class Main extends React.Component {
 					this.state.loggedIn ? (<DiscoverFeed />) : (<PublicLanding />)
 				)} />
 				<Route path='/signup' component={SignUpForm} />
-				<Route path='/login' component={LoginForm} />
+				<Route path='/login' component={LoginFormContainer} />
 				<Route path='/user/:username' component={ProfilePage} />
 				<Route path='/event/:event_id' component={PostPage} />
 				<Route path='/settings' component={AccountSettings} />

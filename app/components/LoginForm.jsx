@@ -41,7 +41,7 @@ class LoginForm extends React.Component {
 	handleSubmit = (event) => {
 		event.preventDefault();
 		//TODO: make inputs disabled when login is being confirmed by Firebase.
-		signInWithEmailAndPassword(this.state.email, this.state.password);
+		this.props.login(this.state.email, this.state.password);
 	}
 	render () {
 		if (this.state.loggedIn) {
