@@ -1,9 +1,8 @@
-import { signInWithEmailAndPassword, getAuth } from '../utils/auth';
+import { signInWithEmailAndPassword, getAuth, signUserOut } from '../utils/auth';
 import { getUsername } from '../utils/index';
 
 export const RECEIVE_CURRENT_USER = 'RECEIVE_CURRENT_USER';
-export const RECEIVE_SESSION_ERRORS = 'RECEIVE_SESSION_ERRORS';
-export const CLEAR_SESSION_ERRORS = 'CLEAR_SESSION_ERRORS';
+export const CLEAR_CURRENT_USER = 'CLEAR_CURRENT_USER';
 
 export const login = (email, password) => dispatch => (
   signInWithEmailAndPassword(email, password).then(
@@ -25,6 +24,10 @@ export const login = (email, password) => dispatch => (
 //   const loggedInUser = { username, uid , email }
 //   dispatch(receiveCurrentUser(loggedInUser));
 // };
+
+export const logOut = () => dispatch => (
+  signUserOut().then(() => dispatch(clearCurrentUser()))
+);
 
 export const receiveCurrentUser = currentUser => ({
   type: RECEIVE_CURRENT_USER,

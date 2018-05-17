@@ -1,12 +1,12 @@
 import React from 'react';
-import Header from './Header';
+import HeaderContainer from './HeaderContainer';
 import Main from './Main';
 
 class App extends React.Component {
 	render() {
 		return (
 			<div>
-				<Header />
+				<HeaderContainer />
 				<Main />
 			</div>
 		)
@@ -14,4 +14,3 @@ class App extends React.Component {
 }
 
 export default App;
-

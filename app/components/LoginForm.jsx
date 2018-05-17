@@ -1,37 +1,17 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Redirect } from 'react-router-dom';
-import { signInWithEmailAndPassword, getAuth } from '../utils/auth';
 
 class LoginForm extends React.Component {
 	constructor() {
 		super();
-		this.auth = getAuth();
 		this.state = {
 			email: '',
 			password: '',
-			loggedIn: !!this.auth.currentUser,
-			_isMounted: false
 		}
-	}
-	componentWillMount() {
-		this.setState({_isMounted: true});
-	}
-	componentWillUnmount() {
-		this.setState({_isMounted: false});
-	}
-	safeSetState = (state) => {
-		if (this.state._isMounted) {
-			this.setState(state);
-		}
-	}
-	componentDidMount() {
-		this.auth.onAuthStateChanged(user => {
-			this.safeSetState({loggedIn: !!user})
-		});
 	}
 	handleChange = (event) => {
-		this.safeSetState({
+		this.setState({
 			[event.target.name]: event.target.value
 		});
 	}
@@ -44,7 +24,7 @@ class LoginForm extends React.Component {
 		this.props.login(this.state.email, this.state.password);
 	}
 	render () {
-		if (this.state.loggedIn) {
+		if (this.props.loggedIn) {
 			return (<Redirect to='/'/>);
 		}
 		return (
@@ -72,5 +52,4 @@ class LoginForm extends React.Component {
 		);
 	}
 }
-
 export default LoginForm;
