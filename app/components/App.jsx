@@ -1,13 +1,29 @@
 import React from 'react';
 import HeaderContainer from './HeaderContainer';
 import Main from './Main';
+import { getAuth } from '../utils/auth';
 
 class App extends React.Component {
+	constructor() {
+		super();
+	}
+
+	componentDidMount() {
+		const unsubscribe = getAuth().onAuthStateChanged((user) => {
+		  if (user) {
+				this.props.fetchUser(user.email, user.uid);
+				unsubscribe();
+			} else {
+				unsubscribe();
+			}
+		});
+  }
+
 	render() {
 		return (
 			<div>
 				<HeaderContainer />
-				<Main />
+				<Main loggedIn={this.props.loggedIn} />
 			</div>
 		)
 	}
