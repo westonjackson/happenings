@@ -1,5 +1,6 @@
+import * as types from '../constants/actionTypes.js';
+
 const postsReducer = (state = {}, action) => {
-  Object.freeze(state);
   switch(action.type){
     default:
       return state;
