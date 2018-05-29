@@ -12,15 +12,12 @@ import ProfileStats from './ProfileStats.jsx';
  * Publically viewable page, don't need to be signed in. Will redirect to
  * public landing if 'like' or 'follow' is clicked with no signed in user.
  */
- 
+
 class ProfilePage extends React.Component {
 	constructor() {
 		super();
-		this.auth = getAuth();
 		this.state = {
 			user: {},
-			isCurrUser: false,
-			checkedCurrUser: false,
 			gotUserInfo: false
 		}
 	}
@@ -38,7 +35,6 @@ class ProfilePage extends React.Component {
 	}
 	componentDidMount() {
 		this.initUserPage();
-		this.checkCurrUser();
 	}
 	safeSetState = (state) => {
 		if (this.state._isMounted) {
@@ -59,24 +55,11 @@ class ProfilePage extends React.Component {
 				this.loadFollowStatus(this.state.uid);
 			} else {
 				console.error('404 not found');
-				this.safeSetState({	
+				this.safeSetState({
 					userNotFound: true
 				});
 			}
 		});
-	}
-	checkCurrUser() {
-		if (this.auth.currentUser) {
-			getUsername(this.auth.currentUser.uid).then(data => {
-				let userName = data.val();
-				if (userName === this.props.match.params.username) {
-					this.safeSetState({
-						isCurrUser: true
-					});
-				}
-				this.safeSetState({ checkedCurrUser: true });
-			});
-		}
 	}
 	loadUserStats(uid) {
 		registerForFollowersCount(uid, numFollowers => this.safeSetState({ numFollowers }));
@@ -88,7 +71,7 @@ class ProfilePage extends React.Component {
 		this.safeSetState({ gotUserStats: true });
 	}
 	toggleFollow = (val) => {
-		if (this.auth.currentUser) {
+		if (this.props.loggedIn) {
 			updateFollow(this.state.uid, val);
 		} else {
 			console.log('get an account!');
@@ -105,9 +88,16 @@ class ProfilePage extends React.Component {
 			// TODO - make a custom 404 page
 			return (<Redirect to='/'/>);
 		}
+
+    let isCurrUser = false;
+    const { currentUser } = this.props;
+    if (currentUser && currentUser.uid === this.state.uid) {
+      isCurrUser = true;
+    }
+
 		return (
 			<div>
-				{ this.state.gotUserInfo && 
+				{ this.state.gotUserInfo &&
 					<div>
 					{this.state.user.full_name} ({this.state.user.username})
 						<ProfileStats
@@ -117,8 +107,7 @@ class ProfilePage extends React.Component {
 							isFollowing={this.state.isFollowing}
 							toggleFollow={this.toggleFollow}
 							uid={this.state.uid}
-							checkedCurrUser={this.state.checkedCurrUser}
-							isCurrUser={this.state.isCurrUser}
+							isCurrUser={isCurrUser}
 						/>
 						<ProfilePosts
 							uid={this.state.uid}

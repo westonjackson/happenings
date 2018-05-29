@@ -28,14 +28,13 @@ class ProfileStats extends React.Component {
 			<div onClick={this.toggleFollow}>{followBtnText}</div>
 		);
 		const btn = this.props.isCurrUser ? settings : followBtn;
-		const buttonDisp = this.props.checkedCurrUser ? btn : null;
 
 		return (
 			<div>
 				<div>{`${this.props.numEvents} ${eventsNoun}`}</div>
 				{numFollowers}
 				{numFollowing}
-				{buttonDisp}
+				{btn}
 			</div>
 		);
 	}
