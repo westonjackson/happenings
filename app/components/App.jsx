@@ -9,6 +9,9 @@ class App extends React.Component {
 	}
 
 	componentDidMount() {
+		// fetching authenticated user to store in redux. must unsubscribe
+		// don't want authstate changed listener firing when we log in and
+		// out normally
 		const unsubscribe = getAuth().onAuthStateChanged((user) => {
 		  if (user) {
 				this.props.fetchUser(user.email, user.uid);

@@ -1,7 +1,6 @@
 import React from 'react';
 import { Redirect } from 'react-router-dom';
-import { loadUserByUsername, registerForFollowersCount, registerForFollowingCount,
-getUserPosts, trackFollowStatus, updateFollow } from '../../utils/user';
+import { getUserPosts, trackFollowStatus, updateFollow } from '../../utils/user';
 import { getAuth } from '../../utils/auth';
 import { getUsername } from '../../utils/index';
 
@@ -22,95 +21,72 @@ class ProfilePage extends React.Component {
 		}
 	}
 	componentWillReceiveProps(nextProps) {
-		if (nextProps.location.pathname != this.props.location.pathname) {
-			// TODO: more elegant way of handling this.
-			window.location.reload();
+		if (nextProps.match.params.username != this.props.match.params.username) {
+			this.props.removeListener('people');
+			this.props.removeListener('followers');
+			this.initUserPage(nextProps.match.params.username);
 		}
 	}
-	componentWillMount() {
-		this.setState({ _isMounted: true });
-	}
-	componentWillUnmount() {
-		this.setState({ _isMounted: false });
-	}
+
 	componentDidMount() {
-		this.initUserPage();
+		this.initUserPage(this.props.match.params.username)
 	}
-	safeSetState = (state) => {
-		if (this.state._isMounted) {
-			this.setState(state)
-		}
-	}
-	initUserPage() {
-		loadUserByUsername(this.props.match.params.username).then(snapshot => {
-			const userInfo = snapshot.val();
-			if (userInfo) {
-				const uid = Object.keys(userInfo)[0]; //s im sorry
-				this.safeSetState({
-					user: userInfo[uid],
-					uid: uid,
-					gotUserInfo: true
-				});
-				this.loadUserStats(this.state.uid);
-				this.loadFollowStatus(this.state.uid);
-			} else {
-				console.error('404 not found');
-				this.safeSetState({
-					userNotFound: true
-				});
-			}
+
+	initUserPage(username) {
+		this.props.fetchUserByUsername(this.props.match.params.username).then(() => {
+			//have to wait until we fetch user to create fb listeners (need uid)
+			this.props.listenToFollowers(this.props.user.uid);
+			this.props.listenToFollowing(this.props.user.uid);
 		});
 	}
-	loadUserStats(uid) {
-		registerForFollowersCount(uid, numFollowers => this.safeSetState({ numFollowers }));
-		registerForFollowingCount(uid, numFollowing => this.safeSetState({ numFollowing }));
-		const numPosts = this.state.user.hasOwnProperty('posts') ? (
-			Object.keys(this.state.user.posts).length
-			) : 0;
-		this.safeSetState({ numPosts });
-		this.safeSetState({ gotUserStats: true });
+
+	componentWillUnmount() {
+		//need to unmount fb listeners on component unmount
+		this.props.removeListener('people')
+		this.props.removeListener('followers')
 	}
+
 	toggleFollow = (val) => {
 		if (this.props.loggedIn) {
-			updateFollow(this.state.uid, val);
+			updateFollow(this.props.user.uid, val);
 		} else {
 			console.log('get an account!');
 			// TODO Redirect
 		}
 	}
-	loadFollowStatus(uid) {
-		trackFollowStatus(uid, data => {
-			this.safeSetState({ isFollowing: !!data.val() });
-		});
-	}
+
 	render() {
-		if (this.state.userNotFound) {
-			// TODO - make a custom 404 page
-			return (<Redirect to='/'/>);
+		const { currentUser, followerCount, followingCount, user} = this.props;
+
+		if (!user) {
+			return <h1>loadin</h1>
 		}
 
     let isCurrUser = false;
-    const { currentUser } = this.props;
-    if (currentUser && currentUser.uid === this.state.uid) {
+		let numEvents = 0;
+    if (currentUser && currentUser.uid === user.uid) {
       isCurrUser = true;
     }
-
+		if (user.posts) {
+			numEvents = Object.keys(user.posts).length;
+		}
+		// TODO fix is following (put in container)
 		return (
 			<div>
-				{ this.state.gotUserInfo &&
+				{
 					<div>
-					{this.state.user.full_name} ({this.state.user.username})
+					{user.full_name} ({user.username})
 						<ProfileStats
-							numFollowers={this.state.numFollowers}
-							numFollowing={this.state.numFollowing}
-							numEvents={this.state.numPosts}
+							numFollowers={followerCount}
+							numFollowing={followingCount}
+							numEvents={numEvents}
 							isFollowing={this.state.isFollowing}
 							toggleFollow={this.toggleFollow}
-							uid={this.state.uid}
+							uid={user.uid}
 							isCurrUser={isCurrUser}
 						/>
 						<ProfilePosts
-							uid={this.state.uid}
+							uid={user.uid}
 						/>
 					</div>
 				}
