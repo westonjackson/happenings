@@ -11,15 +11,20 @@ config = {
     APP_DIR + '/index.js'
   ],
   module: {
-    rules: [
-      {
+    rules: [{
         test: /\jsx?/,
         exclude: /node_modules/,
         use: ['babel-loader']
       },
       {
         test: /\.(s*)css$/,
-        use: ['style-loader','css-loader', 'sass-loader']
+        use: ['style-loader', 'css-loader', 'sass-loader']
+      },
+      {
+        test: /\.(png|svg|jpg|gif)$/,
+        use: [
+          'file-loader'
+        ]
       }
     ]
   },
