@@ -13,3 +13,6 @@ export const FIREBASE_LISTEN_CHILD_CHANGED = 'FIREBASE_LISTEN_CHILD_CHANGED';
 
 // user actions
 export const RECEIVE_USER = 'RECEIVE_USER';
+
+// post actions
+export const RECEIVE_POSTS = 'RECEIVE_POSTS';

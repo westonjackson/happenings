@@ -1,7 +1,7 @@
 import React from 'react';
 
-import ProfilePosts from './ProfilePosts';
-import ProfileStats from './ProfileStats.jsx';
+import ProfilePostsContainer from './ProfilePostsContainer';
+import ProfileStats from './ProfileStats';
 
 /**
  * Publically viewable page, don't need to be signed in. Will redirect to
@@ -66,7 +66,7 @@ class ProfilePage extends React.Component {
 							user={user}
 							isCurrUser={isCurrUser}
 						/>
-						<ProfilePosts
+						<ProfilePostsContainer
 							uid={user.uid}
 							isCurrUser={isCurrUser}
 						/>

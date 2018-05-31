@@ -1,55 +1,47 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { getUserFeedPosts } from '../../utils/feed';
 
 import Post from '../post/Post.jsx';
 
 /**
  * Publically viewable page, don't need to be signed in
  */
- 
+
 class ProfilePosts extends React.Component {
-	state = {
-		gotPostsData: false
+	componentDidMount() {
+		this.props.getPosts();
 	}
-	componentWillMount() {
-		getUserFeedPosts(this.props.uid).then(data => {
-			const postIds = Object.keys(data.entries);
-			if (postIds.length == 0) {
-				this.setState({noPostsToShow: true});
-			} else {
-				this.setState({posts: data.entries, gotData: true});
-			}
-		});
-	}
-	// TODO - make this a different thing that uses a different component
-	addPosts() {
-		const posts = this.state.posts;
-		return Object.keys(posts).map(postId => {
-			let postData = posts[postId];
-			return (
-				<Post
-					key={postId}
-					id={postId}
-					author={postData.author}
-					full_storage_uri={postData.full_storage_uri}
-					full_url={postData.full_url}
-					caption={postData.text}
-					thumb_storage_uri={postData.thumb_storage_uri}
-					thumb_url={postData.thumb_url}
-				/>
-			)
-		});
-	}
+
 	render() {
+		const { posts } = this.props;
+
 		return (
-			<div>{this.state.gotData && this.addPosts()}</div>
+			<div>
+				{
+					Object.keys(posts).map(postId => {
+						let postData = posts[postId];
+						return (
+							<Post
+								key={postId}
+								id={postId}
+								author={postData.author}
+								full_storage_uri={postData.full_storage_uri}
+								full_url={postData.full_url}
+								caption={postData.text}
+								thumb_storage_uri={postData.thumb_storage_uri}
+								thumb_url={postData.thumb_url}
+							/>
+						)
+					})
+				}
+			</div>
 		);
 	}
 }
 
 ProfilePosts.propTypes = {
 	uid: PropTypes.string,
+	isCurrUser: PropTypes.bool
 }
 
 export default ProfilePosts;
