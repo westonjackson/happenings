@@ -10,8 +10,8 @@ const usersReducer = (state = {}, action) => {
       const shapedUser = action.user[uid];
       if (shapedUser.posts) {
         shapedUser.posts = Object.keys(shapedUser.posts);
-        shapedUser.uid = uid;
       }
+      shapedUser.uid = uid;
 
       return Object.assign({}, state, { [action.user[uid].username]: shapedUser });
     default:
