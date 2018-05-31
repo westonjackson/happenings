@@ -63,31 +63,56 @@ class DrawArea extends Component {
     });
   }
 
+  clear = () => {
+    this.setState({
+      lines: []
+    })
+  }
+
   render() {
     return (
-      <div
-        className="draw-area"
-        ref={this.drawArea}
-        onMouseDown={this.handleMouseDown}
-        onMouseMove={this.handleMouseMove}
-      >
-        <Drawing lines={this.state.lines} />
-      </div>
+      <section>
+        <div
+          className="draw-area"
+          ref={this.drawArea}
+          onMouseDown={this.handleMouseDown}
+          onMouseMove={this.handleMouseMove}
+        >
+          <Drawing lines={this.state.lines} />
+        </div>
+        <a onClick={this.clear}>clear</a>
+      </section>
     );
   }
 }
+//
+// const Drawing = ({ lines }) => {
+//   return (
+//     <svg className="drawing">
+//       {lines.map((line, index) => (
+//         <DrawingLine key={index} line={line} />
+//       ))}
+//     </svg>
+//   );
+// }
 
-const Drawing = ({ lines }) => {
-  console.log(lines)
-  return (
-    <svg className="drawing">
-      {lines.map((line, index) => (
-        <DrawingLine key={index} line={line} />
-      ))}
-    </svg>
-  );
+class Drawing extends Component  {
+  constructor() {
+    super();
+    this.svg = React.createRef();
+  }
+
+  render() {
+    const { lines } = this.props
+    return (
+      <svg ref={this.svg} className="drawing">
+        {lines.map((line, index) => (
+          <DrawingLine key={index} line={line} />
+        ))}
+      </svg>
+    );
+  }
 }
-
 const DrawingLine = ({ line }) => {
   const pathData = "M " +
     line.map(p => {
