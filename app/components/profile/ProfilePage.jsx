@@ -1,8 +1,4 @@
 import React from 'react';
-import { Redirect } from 'react-router-dom';
-import { getUserPosts, trackFollowStatus, updateFollow } from '../../utils/user';
-import { getAuth } from '../../utils/auth';
-import { getUsername } from '../../utils/index';
 
 import ProfilePosts from './ProfilePosts';
 import ProfileStats from './ProfileStats.jsx';
@@ -15,10 +11,6 @@ import ProfileStats from './ProfileStats.jsx';
 class ProfilePage extends React.Component {
 	constructor() {
 		super();
-		this.state = {
-			user: {},
-			gotUserInfo: false
-		}
 	}
 	componentWillReceiveProps(nextProps) {
 		if (nextProps.match.params.username != this.props.match.params.username) {
@@ -33,8 +25,7 @@ class ProfilePage extends React.Component {
 	}
 
 	initUserPage(username) {
-		this.props.fetchUserByUsername(this.props.match.params.username).then(() => {
-			//have to wait until we fetch user to create fb listeners (need uid)
+		this.props.fetchUserByUsername(username).then(() => {
 			this.props.listenToFollowers(this.props.user.uid);
 			this.props.listenToFollowing(this.props.user.uid);
 		});
@@ -46,47 +37,38 @@ class ProfilePage extends React.Component {
 		this.props.removeListener('followers')
 	}
 
-	toggleFollow = (val) => {
-		if (this.props.loggedIn) {
-			updateFollow(this.props.user.uid, val);
-		} else {
-			console.log('get an account!');
-			// TODO Redirect
-		}
-	}
-
 	render() {
-		const { currentUser, followerCount, followingCount, user} = this.props;
+		const { listenToFollowers,
+			listenToFollowing,
+			fetchUserByUsername,
+			removeListener,
+			user,
+			...stats } = this.props;
+		let isCurrUser = false;
 
+		// will abstact this loading away into HOC or use render props
 		if (!user) {
 			return <h1>loadin</h1>
 		}
 
-    let isCurrUser = false;
-		let numEvents = 0;
-    if (currentUser && currentUser.uid === user.uid) {
-      isCurrUser = true;
-    }
-		if (user.posts) {
-			numEvents = Object.keys(user.posts).length;
+		if (this.props.currentUser
+			&& this.props.currentUser.uid === user.uid) {
+			isCurrUser = true;
 		}
-		// TODO fix is following (put in container)
+
 		return (
 			<div>
 				{
 					<div>
 					{user.full_name} ({user.username})
 						<ProfileStats
-							numFollowers={followerCount}
-							numFollowing={followingCount}
-							numEvents={numEvents}
-							isFollowing={this.state.isFollowing}
-							toggleFollow={this.toggleFollow}
-							uid={user.uid}
+							{...stats}
+							user={user}
 							isCurrUser={isCurrUser}
 						/>
 						<ProfilePosts
 							uid={user.uid}
+							isCurrUser={isCurrUser}
 						/>
 					</div>
 				}

@@ -8,8 +8,8 @@ import { fetchUserByUsername } from '../../actions/user_actions';
 const mapStateToProps = (state, ownProps) => ({
   loggedIn: !!state.session.currentUser,
   currentUser: state.session.currentUser,
-  followerCount: Object.keys(state.listeners.followers.items).length,
-  followingCount: Object.keys(state.listeners.people.items).length,
+  numFollowing: Object.keys(state.listeners.people.items).length,
+  followers: Object.keys(state.listeners.followers.items),
   username: ownProps.match.params.username,
   user: state.entities.users[ownProps.match.params.username]
 })

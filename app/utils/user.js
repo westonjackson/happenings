@@ -47,8 +47,8 @@ export function trackFollowStatus(uid, callback) {
 	}
 }
 
-export function updateFollow(uid, val) {
-	toggleFollowUser(uid, val);
+export function updateFollow(followerUid, followeeUid, val) {
+	toggleFollowUser(followerUid, followeeUid, val);
 }
 
 /**
