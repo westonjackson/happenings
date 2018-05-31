@@ -21,20 +21,22 @@ class Main extends React.Component {
 	}
 	render() {
 		return (
-			<Switch>
-				<Route exact path='/' render={() => (
-					this.props.loggedIn ? (<MainFeed />) : (<PublicLanding />)
-				)} />
-				<Route path='/discover' render={() => (
-					this.props.loggedIn ? (<DiscoverFeed />) : (<PublicLanding />)
-				)} />
-				<Route path='/signup' component={SignUpForm} />
-				<Route path='/login' component={LoginFormContainer} />
-				<Route path='/user/:username' component={ProfilePageContainer} />
-				<Route path='/event/:event_id' component={PostPage} />
-				<Route path='/settings' component={AccountSettings} />
-				<Route path='/create' component={CreateEvent} />
-			</Switch>
+			<main>
+				<Switch>
+					<Route exact path='/' render={() => (
+						this.props.loggedIn ? (<MainFeed />) : (<PublicLanding />)
+					)} />
+					<Route path='/discover' render={() => (
+						this.props.loggedIn ? (<DiscoverFeed />) : (<PublicLanding />)
+					)} />
+					<Route path='/signup' component={SignUpForm} />
+					<Route path='/login' component={LoginFormContainer} />
+					<Route path='/user/:username' component={ProfilePageContainer} />
+					<Route path='/event/:event_id' component={PostPage} />
+					<Route path='/settings' component={AccountSettings} />
+					<Route path='/create' component={CreateEvent} />
+				</Switch>
+			</main>
 		);
 	}
 }

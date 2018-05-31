@@ -28,27 +28,30 @@ class LoginForm extends React.Component {
 			return (<Redirect to='/'/>);
 		}
 		return (
-			<div>
-				Login with email and password:
 				<form onSubmit={this.handleSubmit}>
 					<input
 						type="text"
 						name="email"
 						value={this.state.email}
 						onChange={this.handleChange}
+						className='form-input'
 					/>
 					<input
 						type="password"
 						name="password"
 						value={this.state.password}
 						onChange={this.handleChange}
+						className='form-input'
 					/>
-					<input
-						type="submit"
-						value="Submit"
-					/>
+					<button
+						type="submit">
+						Log In
+					</button>
+
+					<p className='form-help-text'>
+						Forgot your login information? <a className='underline'>Get help here</a>
+					</p>
 				</form>
-			</div>
 		);
 	}
 }
