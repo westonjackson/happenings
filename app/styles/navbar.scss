@@ -1,11 +1,14 @@
 .nav-bar-container {
-	.header {
+	.logo {
 		text-align: center;
 		font-weight: bold;
 		font-size: 32px;
 		padding-top: 10px;
 		padding-bottom: 10px;
 		@include pad-horizontal(10px);
+	}
+
+	header {
 		border-bottom: 1px solid $red;
 	}
 

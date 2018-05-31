@@ -13,7 +13,20 @@ form {
   .form-input {
     border: solid 1px $red;
     color: $red;
-    padding: 16px 8px 16px 8px;
+    padding: 16px 10px 16px 10px;
+
+    &::placeholder { /* Chrome, Firefox, Opera, Safari 10.1+ */
+    color: $red;
+    opacity: 1; /* Firefox */
+    }
+
+    &:-ms-input-placeholder { /* Internet Explorer 10-11 */
+        color: $red;
+    }
+
+    &::-ms-input-placeholder { /* Microsoft Edge */
+        color: $red;
+    }
   }
   button {
     background-color: $red;

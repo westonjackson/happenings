@@ -14,24 +14,15 @@ class MainFeed extends React.Component {
 			posts: {},
 			nextPage: null,
 			gotPostData: false,
-			_isMounted: false,
 		}
-	}
-	componentWillMount() {
-		this.setState({ _isMounted: true });
-	}
-	componentWillUnmount() {
-		this.setState({ _isMounted: false });
 	}
 	componentDidMount() {
 		getPosts(this.URI, this.PAGE_SIZE).then(data => {
-			if (this.state._isMounted) {
-				this.setState({
-					posts: data.entries,
-					gotPostData: true,
-					nextPage: data.nextPage,
-				});
-			}
+			this.setState({
+				posts: data.entries,
+				gotPostData: true,
+				nextPage: data.nextPage,
+			});
 		});
 	}
 	render() {

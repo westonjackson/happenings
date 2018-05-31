@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { signUpNewUser } from '../utils/auth';
+import DrawArea from './Signup/DrawArea';
 
 class SignUpForm extends React.Component {
 	initialState = {
@@ -50,8 +51,9 @@ class SignUpForm extends React.Component {
 						type="text"
 						name="email"
 						value={this.state.email}
-						placeholder="email"
+						placeholder="Email"
 						onChange={this.handleChange}
+						className='form-input'
 					/>
 					<input
 						type="text"
@@ -59,6 +61,7 @@ class SignUpForm extends React.Component {
 						value={this.state.userName}
 						placeholder="Username"
 						onChange={this.handleChange}
+						className='form-input'
 					/>
 					<input
 						type="text"
@@ -66,26 +69,35 @@ class SignUpForm extends React.Component {
 						value={this.state.fullName}
 						placeholder="Full Name"
 						onChange={this.handleChange}
+						className='form-input'
 					/>
 					<input
 						type="password"
 						name="password"
 						value={this.state.password}
-						placeholder="password (at least 6 characters)"
+						placeholder="Password (min 6 chars)"
 						onChange={this.handleChange}
+						className='form-input'
 					/>
 					<input
 						type="password"
 						name="passwordConfirm"
 						value={this.state.passwordConfirm}
-						placeholder="confirm password"
+						placeholder="Confirm Password"
 						onChange={this.handleChange}
+						className='form-input'
 					/>
-					<input
+
+					<section className='draw-container'>
+						<label>Icon</label>
+						<DrawArea />
+					</section>
+
+					<button
 						type="submit"
-						value="Submit"
-					/>
+					>Sign Up</button>
 				</form>
+
 			</div>
 		)
 	}
