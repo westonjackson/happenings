@@ -19,8 +19,8 @@ class PostStats extends React.Component {
 			<div>
 				<div>{`${this.props.likeCount} ${likesNoun}`}</div>
 				<div>{`${this.props.attendingCount} attending`}</div>
-				<div onClick={this.updateLike}>{likeBtnText}</div>
-				<div onClick={this.updateAttending}>{attendBtnTxt}</div>
+				<button onClick={this.updateLike}>{likeBtnText}</button>
+				<button onClick={this.updateAttending}>{attendBtnTxt}</button>
 			</div>
 		);
 	}

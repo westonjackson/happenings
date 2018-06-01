@@ -88,6 +88,7 @@ class NewEventForm extends React.Component {
 						value={this.state.title}
 						placeholder="Title"
 						onChange={this.handleChange}
+						className='form-input'
 					/>
 					<input
 						type="text"
@@ -95,46 +96,53 @@ class NewEventForm extends React.Component {
 						value={this.state.location}
 						placeholder="Location"
 						onChange={this.handleChange}
+						className='form-input'
 					/>
-					<input
-						type="text"
-						name="year"
-						value={this.state.year}
-						placeholder="YYYY"
-						onChange={this.handleChange}
-					/>
-					<input
-						type="text"
-						name="month"
-						value={this.state.month}
-						placeholder="MM"
-						onChange={this.handleChange}
-					/>
-					<input
-						type="text"
-						name="day"
-						value={this.state.day}
-						placeholder="DD"
-						onChange={this.handleChange}
-					/>
-					<input
-						type="text"
-						name="hour"
-						value={this.state.hour}
-						placeholder="HH"
-						onChange={this.handleChange}
-					/>
+					<section>
+						<input
+							type="text"
+							name="year"
+							value={this.state.year}
+							placeholder="YYYY"
+							onChange={this.handleChange}
+							className='form-input short'
+						/>
+						<input
+							type="text"
+							name="month"
+							value={this.state.month}
+							placeholder="MM"
+							onChange={this.handleChange}
+							className='form-input short'
+						/>
+						<input
+							type="text"
+							name="day"
+							value={this.state.day}
+							placeholder="DD"
+							onChange={this.handleChange}
+							className='form-input short'
+						/>
+						<input
+							type="text"
+							name="hour"
+							value={this.state.hour}
+							placeholder="HH"
+							onChange={this.handleChange}
+							className='form-input short'
+						/>
+					</section>
 					<input
 						type="text"
 						name="description"
 						value={this.state.description}
 						placeholder="Description"
 						onChange={this.handleChange}
+						className='form-input'
 					/>
-					<input
+					<button
 						type="submit"
-						value="Create"
-					/>
+					>Create</button>
 				</form>
 			</div>
 		)

@@ -60,12 +60,9 @@ class DiscoverFeed extends React.Component {
 			/>
 		);
 		return (
-			<div>
-				<div>DISCOVER</div>
 				<div>
 					{this.state.gotPostData && ret }
 				</div>
-			</div>
 		)
 	}
 }

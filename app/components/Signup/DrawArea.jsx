@@ -85,16 +85,6 @@ class DrawArea extends Component {
     );
   }
 }
-//
-// const Drawing = ({ lines }) => {
-//   return (
-//     <svg className="drawing">
-//       {lines.map((line, index) => (
-//         <DrawingLine key={index} line={line} />
-//       ))}
-//     </svg>
-//   );
-// }
 
 class Drawing extends Component  {
   constructor() {
@@ -102,14 +92,21 @@ class Drawing extends Component  {
     this.svg = React.createRef();
   }
 
+  serialize = () => {
+    const serializer = new XMLSerializer();
+    this.serializedSVG = serializer.serializeToString(this.svg.current)
+    console.log(this.serializedSVG);
+  }
+
+
   render() {
     const { lines } = this.props
     return (
-      <svg ref={this.svg} className="drawing">
-        {lines.map((line, index) => (
-          <DrawingLine key={index} line={line} />
-        ))}
-      </svg>
+        <svg ref={this.svg} className="drawing">
+          {lines.map((line, index) => (
+            <DrawingLine key={index} line={line} />
+          ))}
+        </svg>
     );
   }
 }

@@ -1,6 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Redirect } from 'react-router-dom';
+
+import DrawArea from '../Signup/DrawArea';
 import { getAuth } from '../../utils/auth';
 import { loadUserData } from '../../utils/user';
 
@@ -65,6 +67,7 @@ class AccountSettings extends React.Component {
 						defaultValue={this.state._email}
 						placeholder="email"
 						onChange={this.handleChange}
+						className='form-input'
 					/>
 					handle
 					<input
@@ -74,6 +77,7 @@ class AccountSettings extends React.Component {
 						defaultValue={this.state._userName}
 						placeholder="username"
 						onChange={this.handleChange}
+						className='form-input'
 					/>
 					display name
 					<input
@@ -83,6 +87,7 @@ class AccountSettings extends React.Component {
 						defaultValue={this.state._fullName}
 						placeholder="display name"
 						onChange={this.handleChange}
+						className='form-input'
 					/>
 					password
 					<input
@@ -91,6 +96,7 @@ class AccountSettings extends React.Component {
 						value={this.state.password}
 						placeholder="password (at least 6 characters)"
 						onChange={this.handleChange}
+						className='form-input'
 					/>
 					password again
 					<input
@@ -99,11 +105,17 @@ class AccountSettings extends React.Component {
 						value={this.state.passwordConfirm}
 						placeholder="confirm password"
 						onChange={this.handleChange}
+						className='form-input'
 					/>
-					<input
+
+					<section className='draw-container'>
+						<label>Redraw icon</label>
+						<DrawArea />
+					</section>
+
+					<button
 						type="submit"
-						value="Save"
-					/>
+					>Save</button>
 				</form>
 			</div>
 		)

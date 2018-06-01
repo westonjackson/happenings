@@ -1,5 +1,5 @@
 import React from 'react';
-import { NavLink } from 'react-router-dom';
+import { NavLink, Link } from 'react-router-dom';
 
 const Header = ({currentUser, logOut, loggedIn}) => {
 	const logOutBtn = (<button onClick={logOut}>Sign out</button>);
@@ -8,7 +8,7 @@ const Header = ({currentUser, logOut, loggedIn}) => {
 
 	return (
 		<div className='nav-bar-container'>
-			<header><h1 className='logo'>HAPPENINGS</h1>{authLink}</header>
+			<header><Link to='/' ><h1 className='logo'>HAPPENINGS</h1></Link>{authLink}</header>
 
 			{ loggedIn &&
 				<nav className='main-nav'>
