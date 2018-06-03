@@ -16,11 +16,12 @@ class App extends React.Component {
 		const unsubscribe = getAuth().onAuthStateChanged((user) => {
 		  if (user) {
 				this.props.fetchUser(user.email, user.uid).then(() => {
-					this.setState({loading: false})
+					this.setState({loading: false});
 				});
 				unsubscribe();
 			} else {
 				unsubscribe();
+				this.setState({loading: false});
 			}
 		});
   }
