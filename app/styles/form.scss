@@ -1,0 +1,50 @@
+form {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  margin-top: 60px;
+
+  .form-input, button {
+    width: 290px;
+    height: 35px;
+    margin-top: 15px;
+    font-family: "Courier New", Courier, monospace;
+  }
+  .form-input {
+    border: solid 1px $red;
+    color: $red;
+    padding: 16px 10px 16px 10px;
+
+    &::placeholder { /* Chrome, Firefox, Opera, Safari 10.1+ */
+    color: $red;
+    opacity: 1; /* Firefox */
+    }
+
+    &:-ms-input-placeholder { /* Internet Explorer 10-11 */
+        color: $red;
+    }
+
+    &::-ms-input-placeholder { /* Microsoft Edge */
+        color: $red;
+    }
+  }
+
+  .short {
+    width: 65px;
+    margin-right: 10px;
+  }
+
+  button {
+    background-color: $red;
+    color:white;
+    font-size: 14px;
+    text-align: center;
+  }
+  .form-help-text {
+    font-size: 12px;
+    font-family: verdana, sans-serif;
+    text-align: center;
+    margin-top: 22px;
+    color: $red;
+  }
+}

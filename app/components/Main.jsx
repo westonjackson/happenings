@@ -7,9 +7,9 @@ import DiscoverFeed from './feed/DiscoverFeed.jsx';
 
 import PublicLanding from './PublicLanding.jsx';
 import SignUpForm from './SignUpForm.jsx';
-import LoginForm from './LoginForm.jsx';
+import LoginFormContainer from './LoginFormContainer.js';
 
-import ProfilePage from './profile/ProfilePage.jsx';
+import ProfilePageContainer from './profile/ProfilePageContainer.jsx';
 import PostPage from './PostPage.jsx';
 import AccountSettings from './account_settings/AccountSettings.jsx';
 
@@ -18,40 +18,26 @@ import CreateEvent from './create/CreateEvent.jsx';
 class Main extends React.Component {
 	constructor() {
 		super();
-		this.auth = getAuth();
-		this.state = {
-			loggedIn: false,
-			gotAuth: false
-		}
-	}
-	componentWillMount() {
-		this.auth.onAuthStateChanged(user => this.onAuthStateChanged(user));
-	}
-	onAuthStateChanged = (user) => {
-		this.setState({
-			loggedIn: !!(user),
-			gotAuth: true
-		});
 	}
 	render() {
-		const loader = (<div>loading...</div>); // TODO
-		const ret = (
-			<Switch>
-				<Route exact path='/' render={() => (
-					this.state.loggedIn ? (<MainFeed />) : (<PublicLanding />)
-				)} />
-				<Route path='/discover' render={() => (
-					this.state.loggedIn ? (<DiscoverFeed />) : (<PublicLanding />)
-				)} />
-				<Route path='/signup' component={SignUpForm} />
-				<Route path='/login' component={LoginForm} />
-				<Route path='/user/:username' component={ProfilePage} />
-				<Route path='/event/:event_id' component={PostPage} />
-				<Route path='/settings' component={AccountSettings} />
-				<Route path='/create' component={CreateEvent} />
-			</Switch>
+		return (
+			<main>
+				<Switch>
+					<Route exact path='/' render={() => (
+						this.props.loggedIn ? (<MainFeed />) : (<PublicLanding />)
+					)} />
+					<Route path='/discover' render={() => (
+						this.props.loggedIn ? (<DiscoverFeed />) : (<PublicLanding />)
+					)} />
+					<Route path='/signup' component={SignUpForm} />
+					<Route path='/login' component={LoginFormContainer} />
+					<Route path='/user/:username' component={ProfilePageContainer} />
+					<Route path='/event/:event_id' component={PostPage} />
+					<Route path='/settings' component={AccountSettings} />
+					<Route path='/create' component={CreateEvent} />
+				</Switch>
+			</main>
 		);
-		return (this.state.gotAuth ? ret : loader)
 	}
 }
 

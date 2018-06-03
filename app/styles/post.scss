@@ -1,11 +1,13 @@
 @import 'mixins';
 
 .post-container {
-	border: 1px solid black;
 	margin-top: 10px;
 	margin-bottom: 10px;
-	@include pad-horizontal(10px);
-	width: 300px;
+
+	img {
+		width: 375;
+		height: auto;
+	}
 }
 
 .comments-container {

@@ -1,37 +1,17 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Redirect } from 'react-router-dom';
-import { signInWithEmailAndPassword, getAuth } from '../utils/auth';
 
 class LoginForm extends React.Component {
 	constructor() {
 		super();
-		this.auth = getAuth();
 		this.state = {
 			email: '',
 			password: '',
-			loggedIn: !!this.auth.currentUser,
-			_isMounted: false
 		}
-	}
-	componentWillMount() {
-		this.setState({_isMounted: true});
-	}
-	componentWillUnmount() {
-		this.setState({_isMounted: false});
-	}
-	safeSetState = (state) => {
-		if (this.state._isMounted) {
-			this.setState(state);
-		}
-	}
-	componentDidMount() {
-		this.auth.onAuthStateChanged(user => {
-			this.safeSetState({loggedIn: !!user})
-		});
 	}
 	handleChange = (event) => {
-		this.safeSetState({
+		this.setState({
 			[event.target.name]: event.target.value
 		});
 	}
@@ -41,36 +21,38 @@ class LoginForm extends React.Component {
 	handleSubmit = (event) => {
 		event.preventDefault();
 		//TODO: make inputs disabled when login is being confirmed by Firebase.
-		signInWithEmailAndPassword(this.state.email, this.state.password);
+		this.props.login(this.state.email, this.state.password);
 	}
 	render () {
-		if (this.state.loggedIn) {
+		if (this.props.loggedIn) {
 			return (<Redirect to='/'/>);
 		}
 		return (
-			<div>
-				Login with email and password:
 				<form onSubmit={this.handleSubmit}>
 					<input
 						type="text"
 						name="email"
 						value={this.state.email}
 						onChange={this.handleChange}
+						className='form-input'
 					/>
 					<input
 						type="password"
 						name="password"
 						value={this.state.password}
 						onChange={this.handleChange}
+						className='form-input'
 					/>
-					<input
-						type="submit"
-						value="Submit"
-					/>
+					<button
+						type="submit">
+						Log In
+					</button>
+
+					<p className='form-help-text'>
+						Forgot your login information? <a className='underline'>Get help here</a>
+					</p>
 				</form>
-			</div>
 		);
 	}
 }
-
 export default LoginForm;

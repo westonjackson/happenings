@@ -22,13 +22,16 @@ export function loadUserData(uid) {
  */
 export function registerForFollowersCount(uid, callback) {
 	const ref = db.ref(`/followers/${uid}`);
-	ref.on('value', data => callback(data.numChildren()));
+	const cb = ref.on('value', data => callback(data.numChildren()));
+	return {cb, ref};
 }
 
 // gets the number of people a user is following
 export function registerForFollowingCount(uid, callback) {
 	const ref = db.ref(`/people/${uid}/following`);
-	ref.on('value', data => callback(data.numChildren()));
+	const cb = ref.on('value', data => callback(data.numChildren()));
+	return {cb, ref};
+
 }
 
 // Starts tracking the "Follow" button status.
@@ -44,8 +47,8 @@ export function trackFollowStatus(uid, callback) {
 	}
 }
 
-export function updateFollow(uid, val) {
-	toggleFollowUser(uid, val);
+export function updateFollow(followerUid, followeeUid, val) {
+	toggleFollowUser(followerUid, followeeUid, val);
 }
 
 /**

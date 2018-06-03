@@ -1,54 +1,60 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
+import { updateFollow } from '../../utils/user';
 
-class ProfileStats extends React.Component {
-	toggleFollow = () => {
-		const newVal = !this.props.isFollowing;
-		this.props.toggleFollow(newVal);
+const ProfileStats = ({
+	isCurrUser,
+	currentUser,
+	user,
+	numFollowing,
+	followers,
+	loggedIn,
+	history }) => {
+
+	const toggleFollow = () => {
+		if (loggedIn) {
+			const newVal = !isFollowing;
+			updateFollow(currentUser.uid, user.uid, newVal);
+		} else {
+			history.push('/');
+		}
 	}
-	render() {
-		// grammar lol
-		const followNoun = this.props.numFollowers == 1 ? 'follower' : 'followers';
-		const eventsNoun = this.props.numEvents == 1 ? 'event' : 'events';
-		const followBtnText = this.props.isFollowing ? 'U R Following' : 'Follow';
 
-		// quick and lazy typechecking to determine if this data has loaded yet
-		const numFollowers = typeof(this.props.numFollowers) == "number" ? (
-			<div>{`${this.props.numFollowers} ${followNoun}`}</div>
-			) : null;
-		const numFollowing = typeof(this.props.numFollowing) == "number" ? (
-			<div>{`${this.props.numFollowing} following`}</div>
-			) : null;
+	const numFollowers = followers.length;
+	const numEvents = user.posts ? Object.keys(user.posts).length : 0;
+	const isFollowing = currentUser ? followers.includes(currentUser.uid) : false;
 
-		const settings = (
-			<div><Link to='/settings'>settings</Link></div>
-		);
-		const followBtn = (
-			<div onClick={this.toggleFollow}>{followBtnText}</div>
-		);
-		const btn = this.props.isCurrUser ? settings : followBtn;
-		const buttonDisp = this.props.checkedCurrUser ? btn : null;
+	// grammar lol
+	const followNoun = numFollowers == 1 ? 'follower' : 'followers';
+	const eventsNoun = numEvents == 1 ? 'event' : 'events';
+	const followBtnText = isFollowing ? 'U R Following' : 'Follow';
 
-		return (
-			<div>
-				<div>{`${this.props.numEvents} ${eventsNoun}`}</div>
-				{numFollowers}
-				{numFollowing}
-				{buttonDisp}
-			</div>
-		);
-	}
+	const settings = (
+		<div><Link to='/settings'>settings</Link></div>
+	);
+	const followBtn = (
+		<div onClick={toggleFollow}>{followBtnText}</div>
+	);
+	const btn = isCurrUser ? settings : followBtn;
+
+	return (
+		<div>
+			<div>{`${numEvents} ${eventsNoun}`}</div>
+			<div>{`${numFollowers} ${followNoun}`}</div>
+			<div>{`${numFollowing} following`}</div>
+			{btn}
+		</div>
+	);
 }
+
 ProfileStats.propTypes = {
-	numFollowers: PropTypes.number,
-	numFollowing: PropTypes.number,
-	numEvents: PropTypes.number,
-	isFollowing: PropTypes.bool,
-	toggleFollow: PropTypes.func,
-	uid: PropTypes.string,
-	checkedCurrUser: PropTypes.bool,
 	isCurrUser: PropTypes.bool,
+	currentUser: PropTypes.object,
+	user: PropTypes.object,
+	numFollowing: PropTypes.number,
+	followers: PropTypes.array,
+	loggedIn: PropTypes.bool
 }
 
 export default ProfileStats;

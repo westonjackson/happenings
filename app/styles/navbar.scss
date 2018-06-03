@@ -1,12 +1,37 @@
 .nav-bar-container {
-	padding-top: 10px;
-	padding-bottom: 10px;
-	border-bottom: 1px solid black;
-}
-.header {
-	text-align: left;
-	font-family: 'Open Sans', sans-serif;
-	font-weight: bold;
-	font-size: 32px;
-	display: inline-block;
+	.logo {
+		text-align: center;
+		font-weight: bold;
+		font-size: 32px;
+		padding-top: 10px;
+		padding-bottom: 10px;
+		@include pad-horizontal(10px);
+	}
+
+	header {
+		border-bottom: 1px solid $red;
+	}
+
+	.main-nav {
+		margin: auto;
+		margin-top:10px;
+		margin-bottom: 25px;
+
+		ul {
+			display: flex;
+			justify-content: center;
+			a {
+				border-right: solid 1px $red;
+				border-bottom: solid 1px $red;
+				margin-right: 13px;
+				padding: 2px 15px;
+			}
+
+			a.active {
+				border: none;
+				border-left: solid 1px $red;
+				border-top: solid 1px $red;
+			}
+		}
+	}
 }

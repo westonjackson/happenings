@@ -86,25 +86,24 @@ export function subscribeToFeed(uri, callback, latestEntryId = null, fetchPostDe
  * If the user is now followed we'll add all his posts to the home feed of the follower.
  * If the user is now not followed anymore all his posts are removed from the follower home feed.
  */
-export function toggleFollowUser(followedUserId, follow) {
-	const auth = getAuth();
-	return db.ref(`/people/${followedUserId}/posts`).once('value').then(
+export function toggleFollowUser(followerUid, followeeUid, val) {
+	return db.ref(`/people/${followeeUid}/posts`).once('value').then(
 		data => {
 			const payload = {};
 			let lastPostId = true;
 
 			// add or remove followed user's posts to the home feed.
 			data.forEach(post => {
-				payload[`/feed/${auth.currentUser.uid}/${post.key}`] = follow ? !!follow : null;
+				payload[`/feed/${followerUid}/${post.key}`] = val? !!val: null;
 				lastPostId = post.key;
 			});
 			// add or remove the signed-in user to the list of followers.
-			payload[`/followers/${followedUserId}/${auth.currentUser.uid}`] =
-				follow ? !!follow : null;
+			payload[`/followers/${followeeUid}/${followerUid}`] =
+				val? !!val: null;
 
 			// add or remove followed user to the 'following' list.
-			payload[`/people/${auth.currentUser.uid}/following/${followedUserId}`] =
-				follow ? lastPostId : null;
+			payload[`/people/${followerUid}/following/${followeeUid}`] =
+				val? lastPostId : null;
 
 			return db.ref().update(payload);
 		}
