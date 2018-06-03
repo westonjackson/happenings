@@ -73,7 +73,7 @@
       ".read": true,
       "$followedUid": {
         "$followerUid": {
-          ".write": "auth.uid === $followerUid", // Can only add yourself as a follower
+          ".write": "auth.uid !== $followedUid", // Cannot follow yourself
           ".validate": "newData.val() === true && newData.parent().parent().parent().child('people').child($followerUid).child('following').child($followedUid).exists()" // Makes sure /people/.../following is in sync
         }
       }
