@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { signUpNewUser } from '../utils/auth';
-import DrawArea from './Signup/DrawArea';
+import DrawArea from './signup/DrawArea';
 
 class SignUpForm extends React.Component {
 	initialState = {

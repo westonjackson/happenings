@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Redirect } from 'react-router-dom';
 
-import DrawArea from '../Signup/DrawArea';
+import DrawArea from '../signup/DrawArea';
 import { getAuth } from '../../utils/auth';
 import { loadUserData } from '../../utils/user';
 

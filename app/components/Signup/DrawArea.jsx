@@ -1,6 +1,6 @@
-import React, { Component } from 'react';
+import React from 'react';
 
-class DrawArea extends Component {
+class DrawArea extends React.Component {
   constructor() {
     super();
 
@@ -86,7 +86,7 @@ class DrawArea extends Component {
   }
 }
 
-class Drawing extends Component  {
+class Drawing extends React.Component  {
   constructor() {
     super();
     this.svg = React.createRef();
