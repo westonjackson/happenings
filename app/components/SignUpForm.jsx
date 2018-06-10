@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { signUpNewUser } from '../utils/auth';
+import { handleSignInFailure } from '../utils/auth';
 import DrawArea from './signup/DrawArea';
 
 class SignUpForm extends React.Component {
@@ -20,26 +21,37 @@ class SignUpForm extends React.Component {
 			[event.target.name]: event.target.value
 		});
 	}
-	// TODO: "this username is already taken" etc
-	validateUserName = () => {
+
+	validUserName = () => {
 		return this.state.userName == this.state.userName.toLowerCase();
 	}
-	validatePassword = () => {
-		return (
-			(this.state.password == this.state.passwordConfirm) &&
-			(this.state.password.length >= this.MIN_PASSWORD_LENGTH)
-		)
+
+	validPasswordMatch = () => {
+		return this.state.password == this.state.passwordConfirm;
 	}
+
+	validPasswordLength = () => {
+		return this.state.password.length >= this.MIN_PASSWORD_LENGTH;
+	}
+
+	signUpFailure = (errorMessage) => {
+		handleSignInFailure(errorMessage);
+		this.setState(this.initialState);
+	} 
+
 	// TODO make 'Sign Up' button DISABLED until the truth condition
 	// this.validateUserName() && this.validatePassword() is satisfied
 	handleSubmit = (event) => {
 		event.preventDefault();
-		if (this.validateUserName() && this.validatePassword()) {
+		if(!this.validUserName()) {
+			this.signUpFailure("Username has capital letters!");
+		} else if(!this.validPasswordMatch()) {
+			this.signUpFailure("Passwords do not match!");
+		} else if(!this.validPasswordLength()) {
+			this.signUpFailure("Password is not long enough!");
+		} else {
 			const userInfo = this.state;
 			signUpNewUser(userInfo);
-		} else {
-			console.error('something wrong still not letting u sign up yet');
-			this.setState(this.initialState);
 		}
 	}
 	render() {
