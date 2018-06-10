@@ -3,19 +3,21 @@ import PropTypes from 'prop-types';
 import { Redirect } from 'react-router-dom';
 
 import DrawArea from '../signup/DrawArea';
-import { getAuth } from '../../utils/auth';
+import { getAuth, handleAuthFailure, updateProfileInfo } from '../../utils/auth';
 import { loadUserData } from '../../utils/user';
 
+
+//TODO: this and SignUpForm.jsx have duplicate code that should be consolidated
 class AccountSettings extends React.Component {
 	constructor() {
 		super();
 		this.auth = getAuth();
 		this.state = {
 			email: '',
+			userName: '',
 			fullName: '',
-			passWord: '',
-			repeatPassword: '',
-			shape: ''
+			password: '',
+			passwordConfirm: ''
 		}
 	}
 	componentDidMount() {
@@ -37,21 +39,46 @@ class AccountSettings extends React.Component {
 			})
 		}
 	}
+	
+	MIN_PASSWORD_LENGTH = 6;
+
 	handleChange = (event) => {
 		this.setState({
 			[event.target.name]: event.target.value
 		});
 	}
+
+	validUserName = () => {
+		return this.state.userName == this.state.userName.toLowerCase();
+	}
+
+	validPasswordMatch = () => {
+		return this.state.password == this.state.passwordConfirm;
+	}
+
+	validPasswordLength = () => {
+		return this.state.password.length >= this.MIN_PASSWORD_LENGTH;
+	}
+
+	updateFailure = (errorMessage) => {
+		handleAuthFailure(errorMessage);
+		this.setState(this.initialState);
+	}
+
 	handleSubmit = (event) => {
 		event.preventDefault();
-		if (this.validateUserName() && this.validatePassword()) {
-			const userInfo = this.state;
-			signUpNewUser(userInfo);
+		if(!this.validUserName()) {
+			this.updateFailure("Username has capital letters!");
+		} else if(!this.validPasswordMatch()) {
+			this.updateFailure("Passwords do not match!");
+		} else if(!this.validPasswordLength()) {
+			this.updateFailure("Password is not long enough!");
 		} else {
-			console.error('something wrong still not letting u save settings yet');
-			this.setState(this.initialState);
+			const userInfo = this.state;
+			updateProfileInfo(userInfo);
 		}
 	}
+
 	render()  {
 		if (!this.auth.currentUser) {
 			return (<Redirect to='/'/>);

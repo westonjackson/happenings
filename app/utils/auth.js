@@ -35,7 +35,12 @@ export function signInWithEmailAndPassword(email, password) {
 // 	});
 }
 
-export function handleSignInFailure(errorMessage) {
+//TODO: implement this
+export function updateProfileInfo(userInfo) {
+	alert("Updating profile not allowed yet!");
+}
+
+export function handleAuthFailure(errorMessage) {
 	alert(errorMessage);
 }
 

@@ -1,7 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { signUpNewUser } from '../utils/auth';
-import { handleSignInFailure } from '../utils/auth';
+import { signUpNewUser, handleAuthFailure } from '../utils/auth';
 import DrawArea from './signup/DrawArea';
 
 class SignUpForm extends React.Component {
@@ -35,12 +34,11 @@ class SignUpForm extends React.Component {
 	}
 
 	signUpFailure = (errorMessage) => {
-		handleSignInFailure(errorMessage);
+		handleAuthFailure(errorMessage);
 		this.setState(this.initialState);
-	} 
+	}
 
 	// TODO make 'Sign Up' button DISABLED until the truth condition
-	// this.validateUserName() && this.validatePassword() is satisfied
 	handleSubmit = (event) => {
 		event.preventDefault();
 		if(!this.validUserName()) {
